@@ -29,6 +29,7 @@ export default function MemoryMap() {
     });
 
     mapInstance.current.on('load', () => {
+       mapInstance.current.setFog({});
       // Add markers
 // Create markers and keep references for visibility toggling
 const markerObjs = memories.map(mem => {
@@ -39,6 +40,7 @@ const markerObjs = memories.map(mem => {
         `<div style="font-family: 'Comic Sans MS', cursive; font-size: 14px; color: black;"><b>${mem.label}</b></div>`
       )
     )
+    
     .addTo(mapInstance.current);
   return { mem, marker };
 });
