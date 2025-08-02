@@ -10,10 +10,12 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@maptiler/sdk": "^3.7.0",
     "ditherjs": "^0.10.0",
     "globe.gl": "^2.43.0",
     "leaflet": "^1.9.4",
     "leaflet-polylinedecorator": "^1.6.0",
+    "mapbox-gl": "^3.14.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "three": "^0.179.1",
