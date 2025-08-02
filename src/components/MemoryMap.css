@@ -112,3 +112,8 @@
 .cancel-btn:hover {
   background-color: #d32f2f;
 }
+/* MemoryMap.css */
+/* Remove globe shading effects for flat 2D look */
+.mapboxgl-gl {
+  display: none !important;
+}
