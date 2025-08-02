@@ -35,11 +35,10 @@ export default function MemoryMap() {
     mapRef.current = map;
 
     // Tile layer
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-      attribution: '&copy; <a href="https://carto.com/">CARTO</a>',
-      subdomains: 'abcd',
-      maxZoom: 19
-    }).addTo(map);
+   L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', {
+  attribution: 'Tiles &copy; Esri &mdash; Source: Esri, DeLorme, NAVTEQ, USGS, Intermap, iPC, NRCAN, Esri Japan, METI, Esri China (Hong Kong), Esri (Thailand), TomTom, 2012',
+  maxZoom: 19
+}).addTo(map);
 
     // Create a distinctive icon for temporary markers
     const tempIcon = new L.Icon({
@@ -111,32 +110,43 @@ export default function MemoryMap() {
     updateMapMarkers();
 
     const handleMapClick = (e) => {
-      const { lat, lng } = e.latlng;
-      
-      // Remove previous temp marker if it exists
-      if (tempMarkerRef.current) {
-        mapRef.current.removeLayer(tempMarkerRef.current);
-      }
-      
-      // Create new temp marker with blue icon
-      const marker = L.marker([lat, lng], { 
-        icon: tempIcon,
-        zIndexOffset: 1000 // Make sure it appears above other markers
-      }).addTo(mapRef.current);
-      
-      // Open popup to make it more visible
-      marker.bindPopup("New memory location (unsaved)").openPopup();
-      
-      tempMarkerRef.current = marker;
-      setFormPosition({ lat, lng });
-      setShowForm(true);
-      setNewMemory({
-        title: '',
-        isJournal: false,
-        files: [],
-        voiceMemo: null
-      });
-    };
+  const { lat, lng } = e.latlng;
+  
+  // Remove previous temp marker if it exists
+  if (tempMarkerRef.current) {
+    mapRef.current.removeLayer(tempMarkerRef.current);
+  }
+  
+  // Enhanced zoom animation with slower, smoother transition
+  mapRef.current.flyTo([lat, lng], 16, {
+    duration: 1, // Animation duration in seconds (increased from default)
+    easeLinearity: 0.25, // Controls the speed curve (lower values = smoother start/end)
+    noMoveStart: true, // Don't trigger movestart event
+  });
+  
+  // Add a slight delay before adding the marker to ensure zoom completes
+  setTimeout(() => {
+    // Create new temp marker with blue icon
+    const marker = L.marker([lat, lng], { 
+      icon: tempIcon,
+      zIndexOffset: 1000 // Make sure it appears above other markers
+    }).addTo(mapRef.current);
+    
+    // Open popup to make it more visible
+    marker.bindPopup("New memory location (unsaved)").openPopup();
+    
+    tempMarkerRef.current = marker;
+  }, 500);
+  
+  setFormPosition({ lat, lng });
+  setShowForm(true);
+  setNewMemory({
+    title: '',
+    isJournal: false,
+    files: [],
+    voiceMemo: null
+  });
+};
 
     map.on('click', handleMapClick);
 
