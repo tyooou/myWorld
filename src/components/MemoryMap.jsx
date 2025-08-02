@@ -27,11 +27,11 @@ export default function MemoryMap() {
       popupAnchor: [0, -30]
     });
 
-    // Function to add markers and lines
+    // Function to add markers (no more lines/arrows)
     const updateMapMarkers = () => {
-      // Clear existing markers and lines
+      // Clear existing markers only
       map.eachLayer(layer => {
-        if (layer instanceof L.Marker || layer instanceof L.Polyline || layer instanceof L.PolylineDecorator) {
+        if (layer instanceof L.Marker) {
           map.removeLayer(layer);
         }
       });
@@ -40,32 +40,10 @@ export default function MemoryMap() {
       memories.forEach(mem => {
         L.marker([mem.lat, mem.lng], { icon: customIcon })
           .addTo(map)
-          .bindPopup(`<div style="font-family: 'Comic Sans MS', cursive; font-size: 16px;"><b>${mem.label}</b></div>`);
+          .bindPopup(
+            `<div style="font-family: 'Comic Sans MS', cursive; font-size: 16px;"><b>${mem.label}</b></div>`
+          );
       });
-
-      // Draw arrows between consecutive points
-      for (let i = 0; i < memories.length - 1; i++) {
-        const from = [memories[i].lat, memories[i].lng];
-        const to = [memories[i + 1].lat, memories[i + 1].lng];
-
-        const line = L.polyline([from, to], {
-          color: 'red',
-          weight: 2,
-          opacity: 0.8
-        }).addTo(map);
-
-        // Add arrowhead
-        const arrow = L.polylineDecorator(line, {
-          patterns: [
-            {
-              offset: '100%',
-              repeat: 0,
-              symbol: L.Symbol.arrowHead({ pixelSize: 10, polygon: false, pathOptions: { stroke: true, color: 'red' } })
-            }
-          ]
-        });
-        arrow.addTo(map);
-      }
     };
 
     // Initial render
