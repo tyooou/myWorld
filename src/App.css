@@ -1,0 +1,7 @@
+
+.leaflet-tile {
+  image-rendering: pixelated;
+  image-rendering: crisp-edges; /* Fallback for Safari */
+  transform: translateZ(0); /* Helps on some browsers */
+}
+
