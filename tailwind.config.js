@@ -5,7 +5,7 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        "pixel-arial": ["pixel-arial", "sans-serif"],
+        pixel: ["pixel", "sans-serif"],
       },
     },
   },

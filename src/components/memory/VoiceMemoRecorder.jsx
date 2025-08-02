@@ -1,4 +1,7 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef } from "react";
+import SystemButton from "../system/SystemButton";
+import SystemAudio from "../system/SystemAudio";
+import SystemLabel from "../system/SystemLabel";
 
 export default function VoiceMemoRecorder({ onSave }) {
   const [recording, setRecording] = useState(false);
@@ -16,7 +19,7 @@ export default function VoiceMemoRecorder({ onSave }) {
     };
 
     mediaRecorderRef.current.onstop = () => {
-      const blob = new Blob(audioChunksRef.current, { type: 'audio/webm' });
+      const blob = new Blob(audioChunksRef.current, { type: "audio/webm" });
       const url = URL.createObjectURL(blob);
       setAudioURL(url);
       if (onSave) onSave(blob); // send blob back to parent (e.g. attach to pin)
@@ -32,17 +35,17 @@ export default function VoiceMemoRecorder({ onSave }) {
   };
 
   return (
-    <div>
-      <button onClick={recording ? stopRecording : startRecording}>
-        {recording ? '🛑 Stop Recording' : '🎙️ Start Recording'}
-      </button>
-
+    <div className="flex flex-col">
       {audioURL && (
         <div>
-          <p>Preview:</p>
-          <audio controls src={audioURL} />
+          <SystemLabel text="Voice Memo Preview" />
+          <SystemAudio audioURL={audioURL} />
         </div>
       )}
+      <SystemButton
+        onClick={recording ? stopRecording : startRecording}
+        text={recording ? "🛑 Stop Recording" : "🎙️ Start Recording"}
+      />
     </div>
   );
 }
