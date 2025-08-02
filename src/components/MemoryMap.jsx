@@ -11,189 +11,84 @@ export default function MemoryMap() {
   const pixelCanvasRef = useRef(null);
   const mapInstance = useRef(null);
   const rafRef = useRef(null);
-  const [memories, setMemories] = useState([]);
-  const [showForm, setShowForm] = useState(false);
-  const [formPosition, setFormPosition] = useState({ lat: 0, lng: 0 });
-  const [newMemory, setNewMemory] = useState({
-    title: '',
-    isJournal: false,
-    files: [],
-    voiceMemo: null
-  });
-  const previousViewRef = useRef({ center: [0, 20], zoom: 1.5 });
-  const markerObjs = useRef([]);
-  const tempMarkerRef = useRef(null);
-
-  // Helper: degrees to radians
-  const toRad = deg => (deg * Math.PI) / 180;
-
-  // Returns true if point is on the visible hemisphere of the globe
-  const isVisibleOnGlobe = (center, point) => {
-    const lat1 = toRad(center.lat);
-    const lon1 = toRad(center.lng);
-    const lat2 = toRad(point.lat);
-    const lon2 = toRad(point.lng);
-    const dCos =
-      Math.sin(lat1) * Math.sin(lat2) +
-      Math.cos(lat1) * Math.cos(lat2) * Math.cos(lon2 - lon1);
-    const d = Math.acos(Math.min(1, Math.max(-1, dCos))); // clamp for safety
-    return d <= Math.PI / 2;
-  };
-
-  const updateMarkerVisibility = () => {
-    if (!mapInstance.current) return;
-    const center = mapInstance.current.getCenter();
-    markerObjs.current.forEach(({ mem, marker }) => {
-      if (isVisibleOnGlobe(center, { lat: mem.lat, lng: mem.lng })) {
-        marker.getElement().style.display = '';
-      } else {
-        marker.getElement().style.display = 'none';
-      }
-    });
-  };
-
-  const updateMapMarkers = () => {
-    // Clear existing markers
-    markerObjs.current.forEach(({ marker }) => marker.remove());
-    markerObjs.current = [];
-
-    // Add new markers
-    memories.forEach(mem => {
-      const marker = new mapboxgl.Marker()
-        .setLngLat([mem.lng, mem.lat])
-        .setPopup(
-          new mapboxgl.Popup({ offset: 25 }).setHTML(
-            `<div style="font-family: 'Comic Sans MS', cursive; font-size: 14px; color: black;"><b>${mem.label}</b></div>`
-          )
-        )
-        .addTo(mapInstance.current);
-      
-      markerObjs.current.push({ mem, marker });
-    });
-
-    updateMarkerVisibility();
-  };
-
-  const handleFileChange = (e) => {
-    setNewMemory({
-      ...newMemory,
-      files: [...newMemory.files, ...Array.from(e.target.files)]
-    });
-  };
-
-  const handleVoiceMemo = () => {
-    alert("Voice memo functionality would be implemented here");
-    setNewMemory({
-      ...newMemory,
-      voiceMemo: "voice-memo-placeholder.mp3"
-    });
-  };
-
-  const handleSave = () => {
-    if (!newMemory.title.trim()) {
-      alert("Please enter a title");
-      return;
-    }
-
-    const memoryToAdd = {
-      lat: formPosition.lat,
-      lng: formPosition.lng,
-      label: newMemory.title,
-      isJournal: newMemory.isJournal,
-      files: newMemory.files,
-      voiceMemo: newMemory.voiceMemo
-    };
-
-    setMemories([...memories, memoryToAdd]);
-    setShowForm(false);
-    if (tempMarkerRef.current) {
-      tempMarkerRef.current.remove();
-      tempMarkerRef.current = null;
-    }
-  };
-
-  const handleCancel = () => {
-    setShowForm(false);
-    if (tempMarkerRef.current) {
-      tempMarkerRef.current.remove();
-      tempMarkerRef.current = null;
-    }
-    // Restore previous view
-    mapInstance.current.flyTo({
-      center: previousViewRef.current.center,
-      zoom: previousViewRef.current.zoom,
-      essential: true
-    });
-  };
+  const [projectionStyle, setProjectionStyle] = useState('mercator'); // 'globe' or 'mercator'
+  
+  const memories = [
+    { lat: 40.7128, lng: -74.006, label: "Birthday at Grandma's" },
+    { lat: -36.8485, lng: 174.7633, label: "First soccer match" },
+    { lat: 51.5074, lng: -0.1278, label: "Trip to London" }
+  ];
 
   useEffect(() => {
     // Initialize the map
     mapInstance.current = new mapboxgl.Map({
       container: mapContainer.current,
       style: 'mapbox://styles/eborweed/cmdtnwc8b007x01srgmfwar2m',
-      center: previousViewRef.current.center,
-      zoom: previousViewRef.current.zoom,
-      projection: 'globe',
+      center: [0, 20],
+      zoom: 1.5,
+      projection: projectionStyle,
+      renderWorldCopies: false,
       antialias: true,
     });
 
     mapInstance.current.on('load', () => {
-      updateMapMarkers();
+      // Only set fog for globe projection
+      if (projectionStyle === 'globe') {
+        mapInstance.current.setFog({});
+      }
 
-      // Add click handler for the map
-      mapInstance.current.on('click', (e) => {
-        if (e.originalEvent.target.closest('.mapboxgl-marker') || e.originalEvent.target.closest('.mapboxgl-popup')) {
-          return; // Don't create a new marker or open form
-        }
-        const { lng, lat } = e.lngLat;
-        
-        // Store current view before zooming
-        previousViewRef.current = {
-          center: mapInstance.current.getCenter(),
-          zoom: mapInstance.current.getZoom()
-        };
-        
-        // Remove previous temp marker if it exists
-        if (tempMarkerRef.current) {
-          tempMarkerRef.current.remove();
-        }
-        
-        // Zoom to the clicked location
-        mapInstance.current.flyTo({
-          center: [lng, lat],
-          zoom: 12,
-          essential: true
-        });
-        
-        // Add temporary marker
-        const el = document.createElement('div');
-        el.className = 'temp-marker';
-        el.style.backgroundImage = 'url(https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-blue.png)';
-        el.style.width = '25px';
-        el.style.height = '41px';
-        el.style.backgroundSize = 'contain';
-        
-        tempMarkerRef.current = new mapboxgl.Marker(el)
-          .setLngLat([lng, lat])
-          .setPopup(new mapboxgl.Popup().setHTML("New memory location (unsaved)"))
-          .addTo(mapInstance.current)
-          .togglePopup();
-        
-        setFormPosition({ lat, lng });
-        setShowForm(true);
-        setNewMemory({
-          title: '',
-          isJournal: false,
-          files: [],
-          voiceMemo: null
-        });
+      // Create markers
+      const markerObjs = memories.map(mem => {
+        const marker = new mapboxgl.Marker()
+          .setLngLat([mem.lng, mem.lat])
+          .setPopup(
+            new mapboxgl.Popup({ offset: 25 }).setHTML(
+              `<div style="font-family: 'Comic Sans MS', cursive; font-size: 14px; color: black;"><b>${mem.label}</b></div>`
+            )
+          )
+          .addTo(mapInstance.current);
+        return { mem, marker };
       });
 
-      // Sync visibility when the globe moves/rotates/etc.
-      mapInstance.current.on('move', updateMarkerVisibility);
-      mapInstance.current.on('rotate', updateMarkerVisibility);
-      mapInstance.current.on('pitch', updateMarkerVisibility);
-      mapInstance.current.on('zoom', updateMarkerVisibility);
+      // Only apply globe visibility logic for globe projection
+      if (projectionStyle === 'globe') {
+        // Helper: degrees to radians
+        const toRad = deg => (deg * Math.PI) / 180;
+
+        // Returns true if point is on the visible hemisphere of the globe
+        const isVisibleOnGlobe = (center, point) => {
+          const lat1 = toRad(center.lat);
+          const lon1 = toRad(center.lng);
+          const lat2 = toRad(point.lat);
+          const lon2 = toRad(point.lng);
+          const dCos =
+            Math.sin(lat1) * Math.sin(lat2) +
+            Math.cos(lat1) * Math.cos(lat2) * Math.cos(lon2 - lon1);
+          const d = Math.acos(Math.min(1, Math.max(-1, dCos))); // clamp for safety
+          return d <= Math.PI / 2;
+        };
+
+        const updateMarkerVisibility = () => {
+          if (!mapInstance.current) return;
+          const center = mapInstance.current.getCenter();
+          markerObjs.forEach(({ mem, marker }) => {
+            if (isVisibleOnGlobe(center, { lat: mem.lat, lng: mem.lng })) {
+              marker.getElement().style.display = '';
+            } else {
+              marker.getElement().style.display = 'none';
+            }
+          });
+        };
+
+        // Sync visibility when the globe moves/rotates/etc.
+        mapInstance.current.on('move', updateMarkerVisibility);
+        mapInstance.current.on('rotate', updateMarkerVisibility);
+        mapInstance.current.on('pitch', updateMarkerVisibility);
+        mapInstance.current.on('zoom', updateMarkerVisibility);
+
+        // Initial visibility set
+        updateMarkerVisibility();
+      }
 
       // Start pixelation loop
       const pixelateMap = () => {
@@ -257,17 +152,20 @@ export default function MemoryMap() {
         mapInstance.current = null;
       }
     };
-  }, []);
+  }, [projectionStyle]); // React when projectionStyle changes
 
-  // Update markers when memories change
-  useEffect(() => {
-    if (mapInstance.current && mapInstance.current.isStyleLoaded()) {
-      updateMapMarkers();
-    }
-  }, [memories]);
+  // Function to toggle projection
+  const toggleProjection = () => {
+    setProjectionStyle(prev => prev === 'globe' ? 'mercator' : 'globe');
+  };
 
   return (
-    <div style={{ position: 'relative', width: '100vw', height: '100vh' }}>
+    <div style={{ 
+      position: 'relative', 
+      width: '100vw', 
+      height: '100vh',
+      overflow: 'hidden'
+    }}>
       {/* Pixelated map layer - shows the pixelated version */}
       <canvas
         ref={pixelCanvasRef}
@@ -292,20 +190,27 @@ export default function MemoryMap() {
           width: '100%',
           height: '100%',
           zIndex: 2,
-          background: 'transparent !important'
         }}
       />
       
-      {showForm && (
-        <NewMemoryForm
-          newMemory={newMemory}
-          setNewMemory={setNewMemory}
-          onFileChange={handleFileChange}
-          onVoiceMemo={handleVoiceMemo}
-          onSave={handleSave}
-          onCancel={handleCancel}
-        />
-      )}
+      {/* Button to toggle projection */}
+      <button
+        onClick={toggleProjection}
+        style={{
+          position: 'absolute',
+          top: '10px',
+          right: '10px',
+          zIndex: 3,
+          padding: '10px',
+          background: 'white',
+          border: '1px solid #ccc',
+          borderRadius: '4px',
+          cursor: 'pointer',
+          fontSize: '14px',
+        }}
+      >
+        Switch to {projectionStyle === 'globe' ? '2D' : '3D'} View
+      </button>
     </div>
   );
 }
