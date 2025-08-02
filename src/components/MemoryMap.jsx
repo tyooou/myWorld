@@ -7,10 +7,11 @@ export default function MemoryMap() {
   useEffect(() => {
     const map = L.map('map').setView([20, 0], 2);
 
-    // Use a pixel-style tile layer
-    L.tileLayer('https://a.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png', {
-      maxZoom: 20,
-      attribution: '&copy; OpenStreetMap contributors, tiles from Humanitarian OSM Team'
+    // Use a pixel-style tile layer that works across platforms
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+      attribution: '&copy; <a href="https://carto.com/">CARTO</a>',
+      subdomains: 'abcd',
+      maxZoom: 19
     }).addTo(map);
 
     const customIcon = L.icon({
