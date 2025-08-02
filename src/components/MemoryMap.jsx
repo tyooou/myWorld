@@ -7,7 +7,7 @@ import NewMemoryForm from './NewMemoryForm.jsx';
 
 mapboxgl.accessToken = 'pk.eyJ1IjoiZWJvcndlZWQiLCJhIjoiY21kdG1mcjNkMHBneTJsb24zZzdsZHQycyJ9.B6OMNYu8tzRTiYXh5xLOpQ';
 
-export default function MemoryMap() {
+export default function MemoryMap(name) {
   const mapContainer = useRef(null);
   const pixelCanvasRef = useRef(null);
   const mapInstance = useRef(null);
@@ -15,7 +15,7 @@ export default function MemoryMap() {
   // initialize with Jamal’s fake data for testing
   // const [memories, setMemories] = useState(jamals_data.memories);
   // initialize with empty data for now
-  const [memories, setMemories] = useState([]);
+  const [memories, setMemories] = useState(name.memories||[]);
   const [showForm, setShowForm] = useState(false);
   const [formPosition, setFormPosition] = useState({ lat: 0, lng: 0 });
   const [newMemory, setNewMemory] = useState({
@@ -166,6 +166,7 @@ export default function MemoryMap() {
     };
 
     setMemories([...memories, memoryToAdd]);
+    name.memories = memories; // Update the parent component's state
     setShowForm(false);
     if (tempMarkerRef.current) {
       tempMarkerRef.current.remove();

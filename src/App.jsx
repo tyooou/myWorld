@@ -69,7 +69,7 @@ function App() {
        onShowFriends={() => setCurrentView("friends")}
      />
      {renderOverlay()}
-      <MemoryMap />
+      <MemoryMap name={diddyani_data}/>
       <Footer />
    </>
  );
