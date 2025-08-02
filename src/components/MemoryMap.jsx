@@ -3,6 +3,7 @@ import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import 'leaflet-polylinedecorator';
 import './MemoryMap.css';
+import NewMemoryForm from './NewMemoryForm.jsx'; 
 
 export default function MemoryMap() {
   const [memories, setMemories] = useState([
@@ -20,6 +21,7 @@ export default function MemoryMap() {
   });
   const mapRef = useRef(null);
   const tempMarkerRef = useRef(null);
+  const previousViewRef = useRef({ center: [20, 0], zoom: 2 }); // Store previous view state
 
   useEffect(() => {
     // Fix for default Leaflet markers not showing
@@ -35,10 +37,10 @@ export default function MemoryMap() {
     mapRef.current = map;
 
     // Tile layer
-   L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', {
-  attribution: 'Tiles &copy; Esri &mdash; Source: Esri, DeLorme, NAVTEQ, USGS, Intermap, iPC, NRCAN, Esri Japan, METI, Esri China (Hong Kong), Esri (Thailand), TomTom, 2012',
-  maxZoom: 19
-}).addTo(map);
+    L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', {
+      attribution: 'Tiles &copy; Esri &mdash; Source: Esri, DeLorme, NAVTEQ, USGS, Intermap, iPC, NRCAN, Esri Japan, METI, Esri China (Hong Kong), Esri (Thailand), TomTom, 2012',
+      maxZoom: 19
+    }).addTo(map);
 
     // Create a distinctive icon for temporary markers
     const tempIcon = new L.Icon({
@@ -110,43 +112,49 @@ export default function MemoryMap() {
     updateMapMarkers();
 
     const handleMapClick = (e) => {
-  const { lat, lng } = e.latlng;
-  
-  // Remove previous temp marker if it exists
-  if (tempMarkerRef.current) {
-    mapRef.current.removeLayer(tempMarkerRef.current);
-  }
-  
-  // Enhanced zoom animation with slower, smoother transition
-  mapRef.current.flyTo([lat, lng], 16, {
-    duration: 1, // Animation duration in seconds (increased from default)
-    easeLinearity: 0.25, // Controls the speed curve (lower values = smoother start/end)
-    noMoveStart: true, // Don't trigger movestart event
-  });
-  
-  // Add a slight delay before adding the marker to ensure zoom completes
-  setTimeout(() => {
-    // Create new temp marker with blue icon
-    const marker = L.marker([lat, lng], { 
-      icon: tempIcon,
-      zIndexOffset: 1000 // Make sure it appears above other markers
-    }).addTo(mapRef.current);
-    
-    // Open popup to make it more visible
-    marker.bindPopup("New memory location (unsaved)").openPopup();
-    
-    tempMarkerRef.current = marker;
-  }, 500);
-  
-  setFormPosition({ lat, lng });
-  setShowForm(true);
-  setNewMemory({
-    title: '',
-    isJournal: false,
-    files: [],
-    voiceMemo: null
-  });
-};
+      const { lat, lng } = e.latlng;
+      
+      // Store current view before zooming
+      previousViewRef.current = {
+        center: mapRef.current.getCenter(),
+        zoom: mapRef.current.getZoom()
+      };
+      
+      // Remove previous temp marker if it exists
+      if (tempMarkerRef.current) {
+        mapRef.current.removeLayer(tempMarkerRef.current);
+      }
+      
+      // Enhanced zoom animation with slower, smoother transition
+      mapRef.current.flyTo([lat, lng], 16, {
+        duration: 1,
+        easeLinearity: 0.25,
+        noMoveStart: true,
+      });
+      
+      // Add a slight delay before adding the marker to ensure zoom completes
+      setTimeout(() => {
+        // Create new temp marker with blue icon
+        const marker = L.marker([lat, lng], { 
+          icon: tempIcon,
+          zIndexOffset: 1000
+        }).addTo(mapRef.current);
+        
+        // Open popup to make it more visible
+        marker.bindPopup("New memory location (unsaved)").openPopup();
+        
+        tempMarkerRef.current = marker;
+      }, 500);
+      
+      setFormPosition({ lat, lng });
+      setShowForm(true);
+      setNewMemory({
+        title: '',
+        isJournal: false,
+        files: [],
+        voiceMemo: null
+      });
+    };
 
     map.on('click', handleMapClick);
 
@@ -200,6 +208,15 @@ export default function MemoryMap() {
       tempMarkerRef.current.remove();
       tempMarkerRef.current = null;
     }
+    // Restore previous view
+    mapRef.current.flyTo(
+      previousViewRef.current.center, 
+      previousViewRef.current.zoom, 
+      {
+        duration: 1,
+        easeLinearity: 0.25
+      }
+    );
   };
 
   return (
@@ -207,66 +224,14 @@ export default function MemoryMap() {
       <div id="map" style={{ width: '100%', height: '100%', zIndex: 0 }} />
       
       {showForm && (
-        <div className="memory-form-container">
-          <div className="memory-form">
-            <h2>Create New Memory</h2>
-            
-            <div className="form-group">
-              <label>Title</label>
-              <input
-                type="text"
-                value={newMemory.title}
-                onChange={(e) => setNewMemory({...newMemory, title: e.target.value})}
-                placeholder="Memory title"
-              />
-            </div>
-            
-            <div className="form-group checkbox-group">
-              <input
-                type="checkbox"
-                id="isJournal"
-                checked={newMemory.isJournal}
-                onChange={(e) => setNewMemory({...newMemory, isJournal: e.target.checked})}
-              />
-              <label htmlFor="isJournal">Journal Entry</label>
-            </div>
-            
-            <div className="form-group">
-              <label>Add Files</label>
-              <input
-                type="file"
-                multiple
-                onChange={handleFileChange}
-              />
-              {newMemory.files.length > 0 && (
-                <div className="file-list">
-                  {newMemory.files.map((file, index) => (
-                    <div key={index}>{file.name}</div>
-                  ))}
-                </div>
-              )}
-            </div>
-            
-            <div className="form-group">
-              <label>Voice Memo</label>
-              <button onClick={handleVoiceMemo} className="voice-memo-btn">
-                {newMemory.voiceMemo ? 'Replace Voice Memo' : 'Add Voice Memo'}
-              </button>
-              {newMemory.voiceMemo && (
-                <div className="voice-memo-indicator">Voice memo added</div>
-              )}
-            </div>
-            
-            <div className="form-actions">
-              <button onClick={handleCancel} className="cancel-btn">
-                Cancel
-              </button>
-              <button onClick={handleSave} className="save-btn">
-                Save Memory
-              </button>
-            </div>
-          </div>
-        </div>
+        <NewMemoryForm
+          newMemory={newMemory}
+          setNewMemory={setNewMemory}
+          onFileChange={handleFileChange}
+          onVoiceMemo={handleVoiceMemo}
+          onSave={handleSave}
+          onCancel={handleCancel}
+        />
       )}
     </div>
   );
