@@ -17,6 +17,7 @@
     "leaflet-polylinedecorator": "^1.6.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
+    "tailwindcss": "^4.1.11",
     "three": "^0.179.1",
     "three-globe": "^2.44.0"
   },

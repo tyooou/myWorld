@@ -1,0 +1,103 @@
+.memory-form-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 350px;
+  height: 600px;
+  background-color: rgba(255, 255, 255, 0.9);
+  z-index: 1000;
+  padding: 20px;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+  overflow-y: auto;
+}
+
+.memory-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.memory-form h2 {
+  margin-top: 0;
+  color: #333;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.form-group label {
+  font-weight: bold;
+  color: #555;
+}
+
+.form-group input[type="text"] {
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.checkbox-group {
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+}
+
+.file-list {
+  margin-top: 5px;
+  font-size: 0.9em;
+  color: #666;
+}
+
+.voice-memo-btn {
+  padding: 8px 12px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.voice-memo-btn:hover {
+  background-color: #45a049;
+}
+
+.voice-memo-indicator {
+  margin-top: 5px;
+  color: #4CAF50;
+  font-size: 0.9em;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.save-btn {
+  padding: 10px 15px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.save-btn:hover {
+  background-color: #45a049;
+}
+
+.cancel-btn {
+  padding: 10px 15px;
+  background-color: #f44336;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.cancel-btn:hover {
+  background-color: #d32f2f;
+}
