@@ -20,9 +20,10 @@ export default function MemoryMap() {
     files: [],
     voiceMemo: null
   });
-  const previousViewRef = useRef({ center: [0, 20], zoom: 1.5 });
+  const previousViewRef = useRef({ center: [0, 20], zoom: 4 });
   const markerObjs = useRef([]);
   const tempMarkerRef = useRef(null);
+  const [isLocating, setIsLocating] = useState(false); // Track geolocation status
 
   // Helper: degrees to radians
   const toRad = deg => (deg * Math.PI) / 180;
@@ -72,6 +73,44 @@ export default function MemoryMap() {
     });
 
     updateMarkerVisibility();
+  };
+
+  // Function to center map on user's location
+  const locateUser = () => {
+    if (!navigator.geolocation) {
+      alert("Geolocation is not supported by your browser");
+      return;
+    }
+
+    setIsLocating(true);
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const { longitude, latitude } = position.coords;
+        previousViewRef.current = {
+          center: [longitude, latitude],
+          zoom: 4
+        };
+        
+        if (mapInstance.current) {
+          mapInstance.current.flyTo({
+            center: [longitude, latitude],
+            zoom: 4,
+            essential: true
+          });
+        }
+        setIsLocating(false);
+      },
+      (error) => {
+        console.error("Error getting location:", error);
+        setIsLocating(false);
+        alert("Could not determine your location");
+      },
+      {
+        enableHighAccuracy: true,
+        timeout: 5000,
+        maximumAge: 0
+      }
+    );
   };
 
   const handleFileChange = (e) => {
@@ -137,9 +176,12 @@ export default function MemoryMap() {
       antialias: true,
     });
 
+    // Try to locate user immediately after map loads
     mapInstance.current.on('load', () => {
+      locateUser(); // Center on user's location
       updateMapMarkers();
 
+      // Rest of your load handler...
       // Add click handler for the map
       mapInstance.current.on('click', (e) => {
         if (e.originalEvent.target.closest('.mapboxgl-marker') || e.originalEvent.target.closest('.mapboxgl-popup')) {
@@ -161,7 +203,7 @@ export default function MemoryMap() {
         // Zoom to the clicked location
         mapInstance.current.flyTo({
           center: [lng, lat],
-          zoom: 12,
+          zoom: 11,
           essential: true
         });
         
@@ -268,7 +310,31 @@ export default function MemoryMap() {
 
   return (
     <div style={{ position: 'relative', width: '100vw', height: '100vh' }}>
-      {/* Pixelated map layer - shows the pixelated version */}
+      {/* Loading overlay when locating */}
+      {isLocating && (
+        <div style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          width: '100%',
+          height: '100%',
+          backgroundColor: 'rgba(0,0,0,0.5)',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          zIndex: 10
+        }}>
+          <div style={{
+            padding: '20px',
+            background: 'white',
+            borderRadius: '8px'
+          }}>
+            Locating you...
+          </div>
+        </div>
+      )}
+      
+      {/* Pixelated map layer */}
       <canvas
         ref={pixelCanvasRef}
         style={{
@@ -282,7 +348,7 @@ export default function MemoryMap() {
         }}
       />
       
-      {/* Main map container - visible with controls */}
+      {/* Main map container */}
       <div
         ref={mapContainer}
         style={{
@@ -295,6 +361,25 @@ export default function MemoryMap() {
           background: 'transparent !important'
         }}
       />
+      
+      {/* Locate me button */}
+      <button 
+        onClick={locateUser}
+        style={{
+          position: 'absolute',
+          bottom: '20px',
+          right: '20px',
+          zIndex: 3,
+          padding: '10px',
+          background: 'white',
+          border: 'none',
+          borderRadius: '4px',
+          cursor: 'pointer',
+          boxShadow: '0 0 10px rgba(0,0,0,0.2)'
+        }}
+      >
+        Locate Me
+      </button>
       
       {showForm && (
         <NewMemoryForm
