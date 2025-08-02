@@ -1,4 +1,5 @@
 import React, { useRef, useEffect, useState } from 'react';
+// import { jamals_data } from '../Data/UserData.js';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import './MemoryMap.css';
@@ -11,14 +12,20 @@ export default function MemoryMap() {
   const pixelCanvasRef = useRef(null);
   const mapInstance = useRef(null);
   const rafRef = useRef(null);
+  // initialize with Jamal’s fake data for testing
+  // const [memories, setMemories] = useState(jamals_data.memories);
+  // initialize with empty data for now
   const [memories, setMemories] = useState([]);
   const [showForm, setShowForm] = useState(false);
   const [formPosition, setFormPosition] = useState({ lat: 0, lng: 0 });
   const [newMemory, setNewMemory] = useState({
     title: '',
-    isJournal: false,
+    journal: '',
     files: [],
-    voiceMemo: null
+    voiceMemo: null,
+    country: '',
+    tag: '',
+    coordinate: { lat: null, lng: null },
   });
   const previousViewRef = useRef({ center: [0, 20], zoom: 4 });
   const markerObjs = useRef([]);
@@ -45,7 +52,8 @@ export default function MemoryMap() {
     if (!mapInstance.current) return;
     const center = mapInstance.current.getCenter();
     markerObjs.current.forEach(({ mem, marker }) => {
-      if (isVisibleOnGlobe(center, { lat: mem.lat, lng: mem.lng })) {
+      const { coordinate: { lat, lng } } = mem;
+      if (isVisibleOnGlobe(center, { lat, lng })) {
         marker.getElement().style.display = '';
       } else {
         marker.getElement().style.display = 'none';
@@ -60,15 +68,28 @@ export default function MemoryMap() {
 
     // Add new markers
     memories.forEach(mem => {
+      const { coordinate: { lng, lat } } = mem;
       const marker = new mapboxgl.Marker()
-        .setLngLat([mem.lng, mem.lat])
-        .setPopup(
-          new mapboxgl.Popup({ offset: 25 }).setHTML(
-            `<div style="font-family: 'Comic Sans MS', cursive; font-size: 14px; color: black;"><b>${mem.label}</b></div>`
-          )
-        )
+        .setLngLat([lng, lat])
         .addTo(mapInstance.current);
       
+      // When user clicks the marker, open the edit form
+      marker.getElement().addEventListener('click', (e) => {
+        e.stopPropagation(); // prevent map click
+        // Populate form with this memory's data
+        setNewMemory({
+          title: mem.title,
+          journal: mem.journal || '',
+          files: mem.files,
+          voiceMemo: mem.voiceMemo,
+          country: mem.country,
+          tag: mem.tag,
+          coordinate: { lat, lng }
+        });
+        setFormPosition({ lat, lng });
+        setShowForm(true);
+      });
+
       markerObjs.current.push({ mem, marker });
     });
 
@@ -108,7 +129,7 @@ export default function MemoryMap() {
       {
         enableHighAccuracy: true,
         timeout: 5000,
-        maximumAge: 0
+        maximumçAge: 0
       }
     );
   };
@@ -135,12 +156,13 @@ export default function MemoryMap() {
     }
 
     const memoryToAdd = {
-      lat: formPosition.lat,
-      lng: formPosition.lng,
-      label: newMemory.title,
-      isJournal: newMemory.isJournal,
+      title: newMemory.title,
+      journal: newMemory.journal,
       files: newMemory.files,
-      voiceMemo: newMemory.voiceMemo
+      voiceMemo: newMemory.voiceMemo,
+      country: newMemory.country,
+      tag: newMemory.tag,
+      coordinate: newMemory.coordinate
     };
 
     setMemories([...memories, memoryToAdd]);
@@ -150,6 +172,8 @@ export default function MemoryMap() {
       tempMarkerRef.current = null;
     }
   };
+
+  console.log(memories)
 
   const handleCancel = () => {
     setShowForm(false);
@@ -209,7 +233,7 @@ export default function MemoryMap() {
         
         // Add temporary marker
         const el = document.createElement('div');
-        el.className = 'temp-marker';
+        el.className = 'Marker';
         el.style.backgroundImage = 'url(https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-blue.png)';
         el.style.width = '25px';
         el.style.height = '41px';
@@ -225,9 +249,12 @@ export default function MemoryMap() {
         setShowForm(true);
         setNewMemory({
           title: '',
-          isJournal: false,
+          journal: '',
           files: [],
-          voiceMemo: null
+          voiceMemo: null,
+          country: '',
+          tag: '',
+          coordinate: { lat, lng }
         });
       });
 

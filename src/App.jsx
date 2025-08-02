@@ -1,8 +1,11 @@
+import React, { useEffect } from 'react';
+import { jamals_data, daves_data, diddyani_data } from './Data/UserData.js';
 import { useState } from "react";
 import "./App.css";
 
 
 import Header from "./components/Header";
+import MemoryMap from './components/MemoryMap';
 import Footer from "./components/Footer";
 import MemoryMap from "./components/MemoryMap";
 import MainLoader from "./LoadingScreens/MainLoader.jsx";
@@ -31,6 +34,21 @@ const FriendsOverlay = ({ onClose }) => (
 
 
 function App() {
+  // On first load, seed localStorage with our fake users
+  useEffect(() => {
+    const LS_KEY = 'myworld_users';
+    if (!localStorage.getItem(LS_KEY)) {
+      localStorage.setItem(
+        LS_KEY,
+        JSON.stringify({
+          jamals: jamals_data,
+          daves: daves_data,
+          diddyani: diddyani_data
+        })
+      );
+    }
+  }, []);
+
  const [currentView, setCurrentView] = useState(null); // 'profile' | 'friends' | null
 
 
@@ -47,14 +65,13 @@ function App() {
 
  return (
    <>
-     <Header
+       <Header
        onShowProfile={() => setCurrentView("profile")}
        onShowFriends={() => setCurrentView("friends")}
      />
      {renderOverlay()}
-     <MemoryMap />
-     {/* <MainLoader /> */}
-     <Footer />
+      <MemoryMap />
+      <Footer />
    </>
  );
 }
