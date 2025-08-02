@@ -41,6 +41,7 @@ export default function NewMemoryForm({
   const [showCustomInput, setShowCustomInput] = useState(false);
   const [customTag, setCustomTag] = useState('');
   const [customTagColor, setCustomTagColor] = useState('#ff69b4');
+  const [modalImg, setModalImg] = useState(null);
 
   useEffect(() => {
     localStorage.setItem('memoryTags', JSON.stringify(tags));
@@ -100,12 +101,12 @@ export default function NewMemoryForm({
       case 'details':
         return (
           <DetailsTab
+            newMemory={newMemory}
+            setNewMemory={setNewMemory}
             tags={tags}
             setTags={setTags}
             selectedTag={selectedTag}
             setSelectedTag={setSelectedTag}
-            newMemory={newMemory}
-            setNewMemory={setNewMemory}
             showCustomInput={showCustomInput}
             setShowCustomInput={setShowCustomInput}
             customTag={customTag}
@@ -126,10 +127,84 @@ export default function NewMemoryForm({
         );
 
       case 'voice':
-        return <VoiceMemoRecorder onSave={() => console.log("Saved voice memo")} />;
+        return (
+          <div>
+            <VoiceMemoRecorder
+              onSave={(blob) => {
+                onVoiceMemo({ target: { files: [blob] } });
+              }}
+            />
+            {newMemory.voiceMemo && (
+              <audio
+                controls
+                src={
+                  typeof newMemory.voiceMemo === 'string'
+                    ? `/${newMemory.voiceMemo}`
+                    : URL.createObjectURL(newMemory.voiceMemo)
+                }
+                style={{ marginTop: '0.5rem', width: '100%' }}
+              />
+            )}
+          </div>
+        );
 
       case 'pictures':
-        return <ImageUploader onSave={() => console.log("Saved Pics)")} />;
+        return (
+          <>
+            <label>
+              <strong>📷 Add Photos:</strong>
+              <input
+                type="file"
+                accept="image/*"
+                multiple
+                onChange={onFileChange}
+                style={{ display: 'block', marginTop: '0.5rem' }}
+              />
+            </label>
+            {newMemory.files.length > 0 && (
+              <div style={{ marginTop: '1rem', display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+                {newMemory.files.map((fileOrName, idx) => {
+                  const src = typeof fileOrName === 'string'
+                    ? `/${fileOrName}`
+                    : URL.createObjectURL(fileOrName);
+                  return (
+                    <img
+                      key={idx}
+                      src={src}
+                      alt={`pic-${idx}`}
+                      onClick={() => setModalImg(src)}
+                      style={{
+                        maxWidth: '100px',
+                        maxHeight: '100px',
+                        objectFit: 'cover',
+                        borderRadius: '4px',
+                        cursor: 'pointer'
+                      }}
+                    />
+                  );
+                })}
+              </div>
+            )}
+
+            {modalImg && (
+              <div
+                className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50"
+                onClick={() => setModalImg(null)}
+              >
+                <img
+                  src={modalImg}
+                  alt="Enlarged"
+                  style={{
+                    maxWidth: '90%',
+                    maxHeight: '90%',
+                    borderRadius: '8px',
+                    boxShadow: '0 0 15px rgba(0,0,0,0.5)'
+                  }}
+                />
+              </div>
+            )}
+          </>
+        );
 
       default:
         return null;
@@ -148,7 +223,6 @@ export default function NewMemoryForm({
         <strong>📝 Create New Memory</strong>
       </div>
 
-      {/* Tabs */}
       <div className="flex border-b border-gray-300">
         {['details', 'journal', 'voice', 'pictures'].map(tab => (
           <div
@@ -163,12 +237,10 @@ export default function NewMemoryForm({
         ))}
       </div>
 
-      {/* Content */}
       <div className="p-3 overflow-y-auto" style={{ maxHeight: `${FORM_HEIGHT - 150}px` }}>
         {renderTabContent()}
       </div>
 
-      {/* Actions */}
       <div className="flex justify-end gap-2 p-3 border-t border-gray-300">
         <button
           onClick={onCancel}

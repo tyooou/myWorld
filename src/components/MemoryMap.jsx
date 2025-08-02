@@ -3,6 +3,10 @@ import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import './MemoryMap.css';
 import NewMemoryForm from './NewMemoryForm.jsx';
+import DetailsTab from './DetailsTab';
+import VoiceMemoRecorder from './VoiceMemoRecorder';
+import ImageUploader from './ImageUploader';
+import JournalEntry from './JournalEntry';
 
 mapboxgl.accessToken = 'pk.eyJ1IjoiZWJvcndlZWQiLCJhIjoiY21kdG1mcjNkMHBneTJsb24zZzdsZHQycyJ9.B6OMNYu8tzRTiYXh5xLOpQ';
 
