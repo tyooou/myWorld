@@ -129,7 +129,7 @@ export default function MemoryMap() {
       }
       
       // Enhanced zoom animation with slower, smoother transition
-      mapRef.current.flyTo([lat, lng], 16, {
+      mapRef.current.flyTo([lat, lng], 12, {
         duration: 1,
         easeLinearity: 0.25,
         noMoveStart: true,
