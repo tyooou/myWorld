@@ -1,8 +1,37 @@
 import React, { useEffect } from 'react';
 import { jamals_data, daves_data, diddyani_data } from './Data/UserData.js';
+import { useState } from "react";
+import "./App.css";
+
+
 import Header from "./components/Header";
 import MemoryMap from './components/MemoryMap';
 import Footer from "./components/Footer";
+import MemoryMap from "./components/MemoryMap";
+import MainLoader from "./LoadingScreens/MainLoader.jsx";
+import FriendsList from "./components/FriendsList.jsx";
+import Profile from "./components/Profile.jsx";
+
+
+const ProfileOverlay = ({ onClose }) => (
+ <div className="absolute top-20 left-5 bg-gray-200 text-gray-800 flex flex-col z-10 text-xs font-pixel-arial p-4">
+   <button onClick={onClose} className="mb-2 px-2 py-1 bg-red-400 text-white rounded">
+     Close Profile
+   </button>
+   <Profile />
+ </div>
+);
+
+
+const FriendsOverlay = ({ onClose }) => (
+ <div className="absolute top-20 left-5 bg-gray-200 text-gray-800 flex flex-col z-10 text-xs font-pixel-arial p-4">
+   <button onClick={onClose} className="mb-2 px-2 py-1 bg-red-400 text-white rounded">
+     Close Friends
+   </button>
+   <FriendsList />
+ </div>
+);
+
 
 function App() {
   // On first load, seed localStorage with our fake users
@@ -20,13 +49,32 @@ function App() {
     }
   }, []);
 
-  return (
-    <>
-      <Header />
+ const [currentView, setCurrentView] = useState(null); // 'profile' | 'friends' | null
+
+
+ const renderOverlay = () => {
+   if (currentView === "profile") {
+     return <ProfileOverlay onClose={() => setCurrentView(null)} />;
+   }
+   if (currentView === "friends") {
+     return <FriendsOverlay onClose={() => setCurrentView(null)} />;
+   }
+   return null;
+ };
+
+
+ return (
+   <>
+       <Header
+       onShowProfile={() => setCurrentView("profile")}
+       onShowFriends={() => setCurrentView("friends")}
+     />
+     {renderOverlay()}
       <MemoryMap />
       <Footer />
-    </>
-  );
+   </>
+ );
 }
+
 
 export default App;
