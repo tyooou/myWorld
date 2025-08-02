@@ -218,7 +218,7 @@ useEffect(() => {
     });
 
     mapInstance.current.on('load', () => {
-      // locateUser();
+      locateUser();
       updateMapMarkers();
 
       mapInstance.current.on('click', (e) => {

@@ -1,16 +1,12 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { jamals_data, daves_data, diddyani_data } from './Data/UserData.js';
-import { useState } from "react";
-import "./App.css";
-
-
-import Header from "./components/Header";
-import MemoryMap from './components/MemoryMap';
-import Footer from "./components/Footer";
-import MainLoader from "./LoadingScreens/MainLoader.jsx";
-import FriendsList from "./components/FriendsList.jsx";
-import Profile from "./components/Profile.jsx";
-
+import SignUp from './logins/SignUp.jsx';
+import Login from './logins/Login.jsx';
+import Header from './components/Header.jsx';
+import MemoryMap from './components/MemoryMap.jsx';
+import Footer from './components/Footer.jsx';
+import FriendsList from './components/FriendsList.jsx';
+import Profile from './components/Profile.jsx';
 
 
 
@@ -35,28 +31,52 @@ const FriendsOverlay = ({ onClose, changeMap }) => (
 </div>
 );
 
-
-function App() {
- // On first load, seed localStorage with our fake users
- useEffect(() => {
-   const LS_KEY = 'myworld_users';
-   if (!localStorage.getItem(LS_KEY)) {
-     localStorage.setItem(
-       LS_KEY,
-       JSON.stringify({
-         jamals: jamals_data,
-         daves: daves_data,
-         diddyani: diddyani_data
-       })
-     );
-   }
- }, []);
+export default function App() {
+  // 1. All hooks must be unconditionally at top
+  const [view, setView] = useState('signup');                // 'signup' | 'login' | 'map'
+  const [userData, setUserData] = useState(jamals_data);
+  const [currentView, setCurrentView] = useState(null);      // for Profile/Friends overlays
+  const [currentUser, setCurrentUser] = useState(daves_data); // 'jamals' | 'daves' | 'diddyani'
+  const [perms,setPerms] = useState(true)
 
 
-const [currentView, setCurrentView] = useState(null); // 'profile' | 'friends' | null
-const [currentUser, setCurrentUser] = useState(daves_data); // 'jamals' | 'daves' | 'diddyani'
-const [perms,setPerms] = useState(true)
+  useEffect(() => {
+    const LS_KEY = 'myworld_users';
+    if (!localStorage.getItem(LS_KEY)) {
+      localStorage.setItem(
+        LS_KEY,
+        JSON.stringify({
+          jamals: jamals_data,
+          daves: daves_data,
+          diddyani: diddyani_data
+        })
+      );
+    }
+  }, []);
 
+  // 2. Handlers to swap between views
+  const handleSignUp = () => setView('login');
+  const handleSwitchToLogin = () => setView('login');
+  const handleLogin = () => setView('map');
+  const handleSwitchToSignUp = () => setView('signup');
+
+  // 3. Early returns for 'signup' & 'login'
+  if (view === 'signup') {
+    return (
+      <SignUp
+        onSignUp={handleSignUp}
+        onSwitchToLogin={handleSwitchToLogin}
+      />
+    );
+  }
+  if (view === 'login') {
+    return (
+      <Login
+        onLogin={handleLogin}
+        onSwitchToSignUp={handleSwitchToSignUp}
+      />
+    );
+  }
 
  const changeMap = (friend) => {
    setCurrentUser(friend);
@@ -99,6 +119,6 @@ return (
 
 
 
-export default App;
+
 
 
