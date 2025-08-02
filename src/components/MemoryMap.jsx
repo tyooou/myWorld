@@ -24,11 +24,13 @@ export default function MemoryMap() {
       style: 'mapbox://styles/eborweed/cmdtnwc8b007x01srgmfwar2m',
       center: [0, 20],
       zoom: 1.5,
-      projection: 'globe',
+      projection: 'mercator', //Chooses the projection type
       antialias: true,
     });
 
     mapInstance.current.on('load', () => {
+     
+
        mapInstance.current.setFog({});
       // Add markers
 // Create markers and keep references for visibility toggling
