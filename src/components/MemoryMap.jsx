@@ -3,10 +3,6 @@ import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import './MemoryMap.css';
 import NewMemoryForm from './NewMemoryForm.jsx';
-import DetailsTab from './DetailsTab';
-import VoiceMemoRecorder from './VoiceMemoRecorder';
-import ImageUploader from './ImageUploader';
-import JournalEntry from './JournalEntry';
 
 mapboxgl.accessToken = 'pk.eyJ1IjoiZWJvcndlZWQiLCJhIjoiY21kdG1mcjNkMHBneTJsb24zZzdsZHQycyJ9.B6OMNYu8tzRTiYXh5xLOpQ';
 
@@ -16,10 +12,29 @@ export default function MemoryMap({ name, permission, onBack }) {
   const mapInstance = useRef(null);
   const rafRef = useRef(null);
   const [memories, setMemories] = useState(name?.memories || []);
+  const [isSwitchingUser, setIsSwitchingUser] = useState(false);
+
+useEffect(() => {
+  setIsSwitchingUser(true);
+  setMemories(name?.memories || []);
+  setTimeout(() => setIsSwitchingUser(false), 300); // Small delay to show transition
+}, [name]);
+
   useEffect(() => {
-    setMemories(name?.memories || []);
-    console.log("Memories updated:", name.memories);
-  }, [name.memories]);
+    if (!mapInstance.current) return;
+  
+    const waitUntilReady = () => {
+      if (mapInstance.current.isStyleLoaded()) {
+        updateMapMarkers();
+      } else {
+        setTimeout(waitUntilReady, 100);
+      }
+    };
+  
+    waitUntilReady();
+  }, [memories]);
+  
+  
   const [showForm, setShowForm] = useState(false);
   const [formPosition, setFormPosition] = useState({ lat: 0, lng: 0 });
   const [newMemory, setNewMemory] = useState({
@@ -66,15 +81,19 @@ export default function MemoryMap({ name, permission, onBack }) {
   };
 
   const updateMapMarkers = () => {
+    if (!mapInstance.current) return;
+  
+    // Remove existing markers
     markerObjs.current.forEach(({ marker }) => marker.remove());
     markerObjs.current = [];
-
+  
+    // Add new ones
     memories.forEach(mem => {
       const { coordinate: { lng, lat } } = mem;
       const marker = new mapboxgl.Marker()
         .setLngLat([lng, lat])
         .addTo(mapInstance.current);
-
+  
       marker.getElement().addEventListener('click', (e) => {
         e.stopPropagation();
         setNewMemory({
@@ -89,12 +108,13 @@ export default function MemoryMap({ name, permission, onBack }) {
         setFormPosition({ lat, lng });
         setShowForm(true);
       });
-
+  
       markerObjs.current.push({ mem, marker });
     });
-
+  
     updateMarkerVisibility();
   };
+  
 
   const locateUser = () => {
     if (!navigator.geolocation) {
@@ -165,6 +185,7 @@ export default function MemoryMap({ name, permission, onBack }) {
     };
 
     setMemories([...memories, memoryToAdd]);
+    //use local storage here to store it
     setShowForm(false);
 
     if (tempMarkerRef.current) {
@@ -197,7 +218,7 @@ export default function MemoryMap({ name, permission, onBack }) {
     });
 
     mapInstance.current.on('load', () => {
-      locateUser();
+      // locateUser();
       updateMapMarkers();
 
       mapInstance.current.on('click', (e) => {
@@ -309,7 +330,7 @@ export default function MemoryMap({ name, permission, onBack }) {
         mapInstance.current = null;
       }
     };
-  }, [permission]);
+  }, [permission,name]);
 
   useEffect(() => {
     if (mapInstance.current && mapInstance.current.isStyleLoaded()) {
@@ -320,6 +341,7 @@ export default function MemoryMap({ name, permission, onBack }) {
   return (
     <div style={{ position: 'relative', width: '100vw', height: '100vh' }}>
       {/* Back Button */}
+      {!permission && (
       <button
         onClick={onBack}
         style={{
@@ -337,6 +359,8 @@ export default function MemoryMap({ name, permission, onBack }) {
       >
         Back
       </button>
+    )}
+
 
       {/* Loading overlay */}
       {isLocating && (
