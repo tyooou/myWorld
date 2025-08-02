@@ -7,7 +7,6 @@ import "./App.css";
 import Header from "./components/Header";
 import MemoryMap from './components/MemoryMap';
 import Footer from "./components/Footer";
-import MemoryMap from "./components/MemoryMap";
 import MainLoader from "./LoadingScreens/MainLoader.jsx";
 import FriendsList from "./components/FriendsList.jsx";
 import Profile from "./components/Profile.jsx";
