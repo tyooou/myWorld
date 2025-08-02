@@ -16,9 +16,13 @@ export default function MemoryMap() {
   const [formPosition, setFormPosition] = useState({ lat: 0, lng: 0 });
   const [newMemory, setNewMemory] = useState({
     title: '',
-    isJournal: false,
+    journal: '',
     files: [],
-    voiceMemo: null
+    voiceMemo: null,
+    country: '',
+    tag: '',
+    lat: null,
+    lng: null,
   });
   const previousViewRef = useRef({ center: [0, 20], zoom: 1.5 });
   const markerObjs = useRef([]);
@@ -61,13 +65,26 @@ export default function MemoryMap() {
     memories.forEach(mem => {
       const marker = new mapboxgl.Marker()
         .setLngLat([mem.lng, mem.lat])
-        .setPopup(
-          new mapboxgl.Popup({ offset: 25 }).setHTML(
-            `<div style="font-family: 'Comic Sans MS', cursive; font-size: 14px; color: black;"><b>${mem.label}</b></div>`
-          )
-        )
         .addTo(mapInstance.current);
       
+      // When user clicks the marker, open the edit form
+      marker.getElement().addEventListener('click', (e) => {
+        e.stopPropagation(); // prevent map click
+        // Populate form with this memory's data
+        setNewMemory({
+          title: mem.title,
+          journal: mem.journal || '',
+          files: mem.files,
+          voiceMemo: mem.voiceMemo,
+          country: mem.country,
+          tag: mem.tag,
+          lat: mem.lat,
+          lng: mem.lng
+        });
+        setFormPosition({ lat: mem.lat, lng: mem.lng });
+        setShowForm(true);
+      });
+
       markerObjs.current.push({ mem, marker });
     });
 
@@ -96,12 +113,14 @@ export default function MemoryMap() {
     }
 
     const memoryToAdd = {
-      lat: formPosition.lat,
-      lng: formPosition.lng,
-      label: newMemory.title,
-      isJournal: newMemory.isJournal,
+      title: newMemory.title,
+      journal: newMemory.journal,
       files: newMemory.files,
-      voiceMemo: newMemory.voiceMemo
+      voiceMemo: newMemory.voiceMemo,
+      country: newMemory.country,
+      tag: newMemory.tag,
+      lat: formPosition.lat,
+      lng: formPosition.lng
     };
 
     setMemories([...memories, memoryToAdd]);
@@ -111,6 +130,8 @@ export default function MemoryMap() {
       tempMarkerRef.current = null;
     }
   };
+
+  console.log(memories)
 
   const handleCancel = () => {
     setShowForm(false);
@@ -167,7 +188,7 @@ export default function MemoryMap() {
         
         // Add temporary marker
         const el = document.createElement('div');
-        el.className = 'temp-marker';
+        el.className = 'Marker';
         el.style.backgroundImage = 'url(https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-blue.png)';
         el.style.width = '25px';
         el.style.height = '41px';
@@ -183,9 +204,13 @@ export default function MemoryMap() {
         setShowForm(true);
         setNewMemory({
           title: '',
-          isJournal: false,
+          journal: '',
           files: [],
-          voiceMemo: null
+          voiceMemo: null,
+          country: '',
+          tag: '',
+          lat,
+          lng
         });
       });
 
