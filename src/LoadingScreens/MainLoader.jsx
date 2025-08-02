@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import LoadingPage from './LoadingPage';
 import LoadingPage2 from './LoadingPage2';
+import MemoryMap from '../components/MemoryMap';
 
 const MainLoader = () => {
     const [step, setStep] = useState(1);
@@ -10,9 +11,9 @@ const MainLoader = () => {
 
     // Final app render (after all loading)
     return (
-        <div className="min-h-screen bg-black text-white flex items-center justify-center">
-            🎉 All systems ready. Welcome to MyWorld!
-        </div>
+       
+            <MemoryMap/>
+        
     );
 };
 
