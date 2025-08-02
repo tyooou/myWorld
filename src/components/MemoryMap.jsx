@@ -7,21 +7,15 @@ import NewMemoryForm from './NewMemoryForm.jsx';
 
 mapboxgl.accessToken = 'pk.eyJ1IjoiZWJvcndlZWQiLCJhIjoiY21kdG1mcjNkMHBneTJsb24zZzdsZHQycyJ9.B6OMNYu8tzRTiYXh5xLOpQ';
 
-export default function MemoryMap({userData}) {
+export default function MemoryMap() {
   const mapContainer = useRef(null);
   const pixelCanvasRef = useRef(null);
   const mapInstance = useRef(null);
   const rafRef = useRef(null);
-
-  const [memories, setMemories] = useState(userData.memories);
-  // const [memories, setMemories] = useState([]);
-
-  useEffect(() => {
-    setMemories(userData.memories || []);
-    console.log("User Memory is here: " + userData.memories)
-  }, [userData.memories]);
-
-
+  // initialize with Jamal’s fake data for testing
+  // const [memories, setMemories] = useState(jamals_data.memories);
+  // initialize with empty data for now
+  const [memories, setMemories] = useState([]);
   const [showForm, setShowForm] = useState(false);
   const [formPosition, setFormPosition] = useState({ lat: 0, lng: 0 });
   const [newMemory, setNewMemory] = useState({

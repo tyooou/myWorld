@@ -13,6 +13,5 @@ function Header({ onShowProfile, onShowFriends, }) {
   );
  }
  
- 
  export default Header;
  
