@@ -1,9 +1,11 @@
+
 import React, { useEffect, useState, useRef } from 'react';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import 'leaflet-polylinedecorator';
 import './MemoryMap.css';
 import NewMemoryForm from './NewMemoryForm.jsx'; 
+
 
 export default function MemoryMap() {
   const [memories, setMemories] = useState([
@@ -24,6 +26,7 @@ export default function MemoryMap() {
   const previousViewRef = useRef({ center: [20, 0], zoom: 2 }); // Store previous view state
 
   useEffect(() => {
+
     // Fix for default Leaflet markers not showing
     delete L.Icon.Default.prototype._getIconUrl;
     L.Icon.Default.mergeOptions({
@@ -153,6 +156,7 @@ export default function MemoryMap() {
         isJournal: false,
         files: [],
         voiceMemo: null
+
       });
     };
 
@@ -220,6 +224,7 @@ export default function MemoryMap() {
   };
 
   return (
+
     <div style={{ position: 'relative', width: '100vw', height: '100vh' }}>
       <div id="map" style={{ width: '100%', height: '100%', zIndex: 0 }} />
       
@@ -233,6 +238,7 @@ export default function MemoryMap() {
           onCancel={handleCancel}
         />
       )}
+
     </div>
   );
 }
