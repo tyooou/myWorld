@@ -3,6 +3,7 @@ import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import 'leaflet-polylinedecorator';
 import './MemoryMap.css';
+import TempMarkerHandler from './TempMarkerHandler';
 
 export default function MemoryMap() {
   const [memories, setMemories] = useState([
@@ -40,16 +41,6 @@ export default function MemoryMap() {
       subdomains: 'abcd',
       maxZoom: 19
     }).addTo(map);
-
-    // Create a distinctive icon for temporary markers
-    const tempIcon = new L.Icon({
-      iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-blue.png',
-      iconSize: [25, 41],
-      iconAnchor: [12, 41],
-      popupAnchor: [1, -34],
-      shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
-      shadowSize: [41, 41]
-    });
 
     const customIcon = new L.Icon({
       iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
@@ -110,38 +101,7 @@ export default function MemoryMap() {
 
     updateMapMarkers();
 
-    const handleMapClick = (e) => {
-      const { lat, lng } = e.latlng;
-      
-      // Remove previous temp marker if it exists
-      if (tempMarkerRef.current) {
-        mapRef.current.removeLayer(tempMarkerRef.current);
-      }
-      
-      // Create new temp marker with blue icon
-      const marker = L.marker([lat, lng], { 
-        icon: tempIcon,
-        zIndexOffset: 1000 // Make sure it appears above other markers
-      }).addTo(mapRef.current);
-      
-      // Open popup to make it more visible
-      marker.bindPopup("New memory location (unsaved)").openPopup();
-      
-      tempMarkerRef.current = marker;
-      setFormPosition({ lat, lng });
-      setShowForm(true);
-      setNewMemory({
-        title: '',
-        isJournal: false,
-        files: [],
-        voiceMemo: null
-      });
-    };
-
-    map.on('click', handleMapClick);
-
     return () => {
-      map.off('click', handleMapClick);
       map.remove();
     };
   }, [memories]);
@@ -195,7 +155,15 @@ export default function MemoryMap() {
   return (
     <div style={{ position: 'relative', width: '100vw', height: '100vh' }}>
       <div id="map" style={{ width: '100%', height: '100%', zIndex: 0 }} />
-      
+
+      <TempMarkerHandler
+        mapRef={mapRef}
+        tempMarkerRef={tempMarkerRef}
+        setFormPosition={setFormPosition}
+        setShowForm={setShowForm}
+        setNewMemory={setNewMemory}
+      />
+
       {showForm && (
         <div className="memory-form-container">
           <div className="memory-form">
