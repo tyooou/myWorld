@@ -60,11 +60,11 @@ export default function MemoryMap() {
       shadowSize: [41, 41]
     });
 
+    // Function to add markers (no more lines/arrows)
     const updateMapMarkers = () => {
-      // Clear existing markers and lines (except temp marker)
+      // Clear existing markers only
       map.eachLayer(layer => {
-        if (layer instanceof L.Marker || layer instanceof L.Polyline || layer instanceof L.PolylineDecorator) {
-          if (tempMarkerRef.current && layer === tempMarkerRef.current) return;
+        if (layer instanceof L.Marker) {
           map.removeLayer(layer);
         }
       });
@@ -73,7 +73,9 @@ export default function MemoryMap() {
       memories.forEach(mem => {
         L.marker([mem.lat, mem.lng], { icon: customIcon })
           .addTo(map)
-          .bindPopup(`<div style="font-family: 'Comic Sans MS', cursive; font-size: 16px;"><b>${mem.label}</b></div>`);
+          .bindPopup(
+            `<div style="font-family: 'Comic Sans MS', cursive; font-size: 16px;"><b>${mem.label}</b></div>`
+          );
       });
 
       // Add lines between memories
