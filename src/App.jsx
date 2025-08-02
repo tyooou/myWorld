@@ -11,24 +11,14 @@ import Profile from './components/Profile.jsx';
 
 
 const ProfileOverlay = ({ onClose }) => (
-<div className="absolute top-20 left-5 bg-gray-200 text-gray-800 flex flex-col z-10 text-xs font-pixel-arial p-4">
-  <button onClick={onClose} className="mb-2 px-2 py-1 bg-red-400 text-white rounded">
-    Close Profile
-  </button>
   <Profile onClose={onClose}/>
-</div>
 );
 
 
 
 
 const FriendsOverlay = ({ onClose, changeMap }) => (
-<div className="absolute top-20 left-5 bg-gray-200 text-gray-800 flex flex-col z-10 text-xs font-pixel-arial p-4">
-  <button onClick={onClose} className="mb-2 px-2 py-1 bg-red-400 text-white rounded">
-    Close Friends
-  </button>
   <FriendsList onClose={onClose} changeMap={changeMap} />
-</div>
 );
 
 export default function App() {
