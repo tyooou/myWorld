@@ -1,9 +1,13 @@
 import React, { useRef, useEffect, useState } from 'react';
-// import { jamals_data } from '../Data/UserData.js';
+import { jamals_data } from '../Data/UserData.js';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import './MemoryMap.css';
 import NewMemoryForm from './NewMemoryForm.jsx';
+import DetailsTab from './DetailsTab';
+import VoiceMemoRecorder from './VoiceMemoRecorder';
+import ImageUploader from './ImageUploader';
+import JournalEntry from './JournalEntry';
 
 mapboxgl.accessToken = 'pk.eyJ1IjoiZWJvcndlZWQiLCJhIjoiY21kdG1mcjNkMHBneTJsb24zZzdsZHQycyJ9.B6OMNYu8tzRTiYXh5xLOpQ';
 
@@ -13,9 +17,9 @@ export default function MemoryMap() {
   const mapInstance = useRef(null);
   const rafRef = useRef(null);
   // initialize with Jamal’s fake data for testing
-  // const [memories, setMemories] = useState(jamals_data.memories);
+  const [memories, setMemories] = useState(jamals_data.memories);
   // initialize with empty data for now
-  const [memories, setMemories] = useState([]);
+  // const [memories, setMemories] = useState([]);
   const [showForm, setShowForm] = useState(false);
   const [formPosition, setFormPosition] = useState({ lat: 0, lng: 0 });
   const [newMemory, setNewMemory] = useState({
