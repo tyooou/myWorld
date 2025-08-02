@@ -121,7 +121,7 @@ export default function NewMemoryForm({
         return (
           <JournalEntry
             journal={newMemory.journal}
-            setJournal={(val) => setNewMemory({ ...newMemory, journal: val })}
+            setJournal={val => setNewMemory({ ...newMemory, journal: val })}
           />
         );
 
