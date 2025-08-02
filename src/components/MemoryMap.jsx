@@ -142,6 +142,9 @@ export default function MemoryMap() {
 
       // Add click handler for the map
       mapInstance.current.on('click', (e) => {
+        if (e.originalEvent.target.closest('.mapboxgl-marker') || e.originalEvent.target.closest('.mapboxgl-popup')) {
+          return; // Don't create a new marker or open form
+        }
         const { lng, lat } = e.lngLat;
         
         // Store current view before zooming
