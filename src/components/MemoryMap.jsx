@@ -1,4 +1,5 @@
 import React, { useRef, useEffect, useState } from 'react';
+// import { jamals_data } from '../Data/UserData.js';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import './MemoryMap.css';
@@ -11,6 +12,9 @@ export default function MemoryMap() {
   const pixelCanvasRef = useRef(null);
   const mapInstance = useRef(null);
   const rafRef = useRef(null);
+  // initialize with Jamal’s fake data for testing
+  // const [memories, setMemories] = useState(jamals_data.memories);
+  // initialize with empty data for now
   const [memories, setMemories] = useState([]);
   const [showForm, setShowForm] = useState(false);
   const [formPosition, setFormPosition] = useState({ lat: 0, lng: 0 });
@@ -21,8 +25,7 @@ export default function MemoryMap() {
     voiceMemo: null,
     country: '',
     tag: '',
-    lat: null,
-    lng: null,
+    coordinate: { lat: null, lng: null },
   });
   const previousViewRef = useRef({ center: [0, 20], zoom: 4 });
   const markerObjs = useRef([]);
@@ -49,7 +52,8 @@ export default function MemoryMap() {
     if (!mapInstance.current) return;
     const center = mapInstance.current.getCenter();
     markerObjs.current.forEach(({ mem, marker }) => {
-      if (isVisibleOnGlobe(center, { lat: mem.lat, lng: mem.lng })) {
+      const { coordinate: { lat, lng } } = mem;
+      if (isVisibleOnGlobe(center, { lat, lng })) {
         marker.getElement().style.display = '';
       } else {
         marker.getElement().style.display = 'none';
@@ -64,8 +68,9 @@ export default function MemoryMap() {
 
     // Add new markers
     memories.forEach(mem => {
+      const { coordinate: { lng, lat } } = mem;
       const marker = new mapboxgl.Marker()
-        .setLngLat([mem.lng, mem.lat])
+        .setLngLat([lng, lat])
         .addTo(mapInstance.current);
       
       // When user clicks the marker, open the edit form
@@ -79,10 +84,9 @@ export default function MemoryMap() {
           voiceMemo: mem.voiceMemo,
           country: mem.country,
           tag: mem.tag,
-          lat: mem.lat,
-          lng: mem.lng
+          coordinate: { lat, lng }
         });
-        setFormPosition({ lat: mem.lat, lng: mem.lng });
+        setFormPosition({ lat, lng });
         setShowForm(true);
       });
 
@@ -125,7 +129,7 @@ export default function MemoryMap() {
       {
         enableHighAccuracy: true,
         timeout: 5000,
-        maximumAge: 0
+        maximumçAge: 0
       }
     );
   };
@@ -158,8 +162,7 @@ export default function MemoryMap() {
       voiceMemo: newMemory.voiceMemo,
       country: newMemory.country,
       tag: newMemory.tag,
-      lat: formPosition.lat,
-      lng: formPosition.lng
+      coordinate: newMemory.coordinate
     };
 
     setMemories([...memories, memoryToAdd]);
@@ -251,8 +254,7 @@ export default function MemoryMap() {
           voiceMemo: null,
           country: '',
           tag: '',
-          lat,
-          lng
+          coordinate: { lat, lng }
         });
       });
 
