@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import './MemoryMap.css';
@@ -10,7 +10,8 @@ export default function MemoryMap() {
   const pixelCanvasRef = useRef(null);
   const mapInstance = useRef(null);
   const rafRef = useRef(null);
-
+  const [projectionStyle, setProjectionStyle] = useState('mercator'); // 'globe' or 'mercator'
+  
   const memories = [
     { lat: 40.7128, lng: -74.006, label: "Birthday at Grandma's" },
     { lat: -36.8485, lng: 174.7633, label: "First soccer match" },
@@ -24,64 +25,69 @@ export default function MemoryMap() {
       style: 'mapbox://styles/eborweed/cmdtnwc8b007x01srgmfwar2m',
       center: [0, 20],
       zoom: 1.5,
-      projection: 'mercator', //Chooses the projection type
+      projection: projectionStyle,
+      renderWorldCopies: false,
       antialias: true,
     });
 
     mapInstance.current.on('load', () => {
-     
+      // Only set fog for globe projection
+      if (projectionStyle === 'globe') {
+        mapInstance.current.setFog({});
+      }
 
-       mapInstance.current.setFog({});
-      // Add markers
-// Create markers and keep references for visibility toggling
-const markerObjs = memories.map(mem => {
-  const marker = new mapboxgl.Marker()
-    .setLngLat([mem.lng, mem.lat])
-    .setPopup(
-      new mapboxgl.Popup({ offset: 25 }).setHTML(
-        `<div style="font-family: 'Comic Sans MS', cursive; font-size: 14px; color: black;"><b>${mem.label}</b></div>`
-      )
-    )
-    
-    .addTo(mapInstance.current);
-  return { mem, marker };
-});
-// Helper: degrees to radians
-const toRad = deg => (deg * Math.PI) / 180;
+      // Create markers
+      const markerObjs = memories.map(mem => {
+        const marker = new mapboxgl.Marker()
+          .setLngLat([mem.lng, mem.lat])
+          .setPopup(
+            new mapboxgl.Popup({ offset: 25 }).setHTML(
+              `<div style="font-family: 'Comic Sans MS', cursive; font-size: 14px; color: black;"><b>${mem.label}</b></div>`
+            )
+          )
+          .addTo(mapInstance.current);
+        return { mem, marker };
+      });
 
-// Returns true if point is on the visible hemisphere of the globe
-const isVisibleOnGlobe = (center, point) => {
-  const lat1 = toRad(center.lat);
-  const lon1 = toRad(center.lng);
-  const lat2 = toRad(point.lat);
-  const lon2 = toRad(point.lng);
-  const dCos =
-    Math.sin(lat1) * Math.sin(lat2) +
-    Math.cos(lat1) * Math.cos(lat2) * Math.cos(lon2 - lon1);
-  const d = Math.acos(Math.min(1, Math.max(-1, dCos))); // clamp for safety
-  return d <= Math.PI / 2;
-};
+      // Only apply globe visibility logic for globe projection
+      if (projectionStyle === 'globe') {
+        // Helper: degrees to radians
+        const toRad = deg => (deg * Math.PI) / 180;
 
-const updateMarkerVisibility = () => {
-  if (!mapInstance.current) return;
-  const center = mapInstance.current.getCenter();
-  markerObjs.forEach(({ mem, marker }) => {
-    if (isVisibleOnGlobe(center, { lat: mem.lat, lng: mem.lng })) {
-      marker.getElement().style.display = '';
-    } else {
-      marker.getElement().style.display = 'none';
-    }
-  });
-};
-// Sync visibility when the globe moves/rotates/etc.
-mapInstance.current.on('move', updateMarkerVisibility);
-mapInstance.current.on('rotate', updateMarkerVisibility);
-mapInstance.current.on('pitch', updateMarkerVisibility);
-mapInstance.current.on('zoom', updateMarkerVisibility);
+        // Returns true if point is on the visible hemisphere of the globe
+        const isVisibleOnGlobe = (center, point) => {
+          const lat1 = toRad(center.lat);
+          const lon1 = toRad(center.lng);
+          const lat2 = toRad(point.lat);
+          const lon2 = toRad(point.lng);
+          const dCos =
+            Math.sin(lat1) * Math.sin(lat2) +
+            Math.cos(lat1) * Math.cos(lat2) * Math.cos(lon2 - lon1);
+          const d = Math.acos(Math.min(1, Math.max(-1, dCos))); // clamp for safety
+          return d <= Math.PI / 2;
+        };
 
-// Initial visibility set
-updateMarkerVisibility();
+        const updateMarkerVisibility = () => {
+          if (!mapInstance.current) return;
+          const center = mapInstance.current.getCenter();
+          markerObjs.forEach(({ mem, marker }) => {
+            if (isVisibleOnGlobe(center, { lat: mem.lat, lng: mem.lng })) {
+              marker.getElement().style.display = '';
+            } else {
+              marker.getElement().style.display = 'none';
+            }
+          });
+        };
 
+        // Sync visibility when the globe moves/rotates/etc.
+        mapInstance.current.on('move', updateMarkerVisibility);
+        mapInstance.current.on('rotate', updateMarkerVisibility);
+        mapInstance.current.on('pitch', updateMarkerVisibility);
+        mapInstance.current.on('zoom', updateMarkerVisibility);
+
+        // Initial visibility set
+        updateMarkerVisibility();
+      }
 
       // Start pixelation loop
       const pixelateMap = () => {
@@ -145,10 +151,20 @@ updateMarkerVisibility();
         mapInstance.current = null;
       }
     };
-  }, []);
+  }, [projectionStyle]); // React when projectionStyle changes
+
+  // Function to toggle projection
+  const toggleProjection = () => {
+    setProjectionStyle(prev => prev === 'globe' ? 'mercator' : 'globe');
+  };
 
   return (
-    <div style={{ position: 'relative', width: '100vw', height: '100vh' }}>
+    <div style={{ 
+      position: 'relative', 
+      width: '100vw', 
+      height: '100vh',
+      overflow: 'hidden'
+    }}>
       {/* Pixelated map layer - shows the pixelated version */}
       <canvas
         ref={pixelCanvasRef}
@@ -173,9 +189,27 @@ updateMarkerVisibility();
           width: '100%',
           height: '100%',
           zIndex: 2,
-          background: 'transparent !important'
         }}
       />
+      
+      {/* Button to toggle projection */}
+      <button
+        onClick={toggleProjection}
+        style={{
+          position: 'absolute',
+          top: '10px',
+          right: '10px',
+          zIndex: 3,
+          padding: '10px',
+          background: 'white',
+          border: '1px solid #ccc',
+          borderRadius: '4px',
+          cursor: 'pointer',
+          fontSize: '14px',
+        }}
+      >
+        Switch to {projectionStyle === 'globe' ? '2D' : '3D'} View
+      </button>
     </div>
   );
 }
