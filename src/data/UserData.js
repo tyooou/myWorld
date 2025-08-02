@@ -40,7 +40,7 @@ export const daves_data = {
   profile: {
     age: 25,
     username: 'dave_explorer',
-    hometown: 'London'
+    hometown: 'Kathmandu'
   },
   memories: [
     {
