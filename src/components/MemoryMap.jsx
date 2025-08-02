@@ -36,7 +36,7 @@ const markerObjs = memories.map(mem => {
     .setLngLat([mem.lng, mem.lat])
     .setPopup(
       new mapboxgl.Popup({ offset: 25 }).setHTML(
-        `<div style="font-family: 'Comic Sans MS', cursive; font-size: 14px;"><b>${mem.label}</b></div>`
+        `<div style="font-family: 'Comic Sans MS', cursive; font-size: 14px; color: black;"><b>${mem.label}</b></div>`
       )
     )
     .addTo(mapInstance.current);
