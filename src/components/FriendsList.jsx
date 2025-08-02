@@ -1,13 +1,13 @@
 
-import {daves_data, diddyani_data, jamals_data} from "../data/UserData.js";
+import {daves_data, diddyani_data, jamals_data} from "../Data/UserData.js";
 import MemoryMap from "./MemoryMap.jsx";
 
 
-export default function FriendsList({onClose, setUserData}) {
+export default function FriendsList({onClose, changeMap}) {
     const friends = [diddyani_data, jamals_data, daves_data];
 
     function handleViewProfile(friend) {
-        setUserData(friend)
+        changeMap(friend)
     }
 
     return (
