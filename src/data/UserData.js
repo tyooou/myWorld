@@ -1,37 +1,37 @@
 // Fake user data including profile and initial memories
 export const jamals_data = {
   profile: {
-    age: 30,
-    username: 'wanderlust_joe',
+    age: 21,
+    username: 'wander_joe',
     hometown: 'Auckland'
   },
   memories: [
     {
-      title: "Birthday at Grandma's",
-      journal: "",               // no journal text for this photo memory
-      files: ['IMG_1827.jpg'],              // ← use default image
-      voiceMemo: 'grandma-voice.webm',
-      country: 'USA',
-      tag: 'family',
-      coordinate: { lat: 40.7128, lng: -74.0060 }
+      title: "Melbourne Skyline",
+      journal: "I woke before dawn to catch the sunrise over Melbourne’s skyline. The streets were quiet and the skyscrapers along the Yarra River glowed in soft pastel light as the city came to life.",
+      files: ['IMG_1716.jpg'],              // default image
+      voiceMemo: 'melbourne-ambience.webm',
+      country: 'Australia',
+      tag: 'travel',
+      coordinate: { lat: -37.8136, lng: 144.9631 }
     },
     {
-      title: 'First Soccer Match',
-      journal: "",               // change boolean → empty string
-      files: ['IMG_1827.jpg'],
+      title: 'Top of New Zealand',
+      journal: "I journeyed to Cape Reinga, the northern-most tip of the North Island. Standing where the Tasman Sea meets the Pacific Ocean, I felt the wild wind whip around the lighthouse and watched two oceans collide on the horizon.",
+      files: ['IMG_1597.jpg'],
       voiceMemo: null,
       country: 'New Zealand',
-      tag: 'sports',
-      coordinate: { lat: -36.8485, lng: 174.7633 }
+      tag: 'adventure',
+      coordinate: { lat: -34.4278, lng: 172.6811 }
     },
     {
-      title: 'Trip to London Journal',
-      journal: "Strolled along the Thames and saw Big Ben…",
-      files: ['IMG_1827.jpg'],
-      voiceMemo: 'london-journey.webm',
-      country: 'UK',
+      title: 'Motorcycle Ride Through the Nights of Vietnam',
+      journal: "Zoomed through the bustling streets of Hanoi on a motorbike at night, neon lights reflecting off wet pavement while the scent of street-food stalls and incense filled the air.",
+      files: ['IMG_1346.jpg'],
+      voiceMemo: 'hanoi-ride.webm',
+      country: 'Vietnam',
       tag: 'travel',
-      coordinate: { lat: 51.5074, lng: -0.1278 }
+      coordinate: { lat: 21.0278, lng: 105.8342 }
     }
   ]
 };
