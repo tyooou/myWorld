@@ -1,12 +1,18 @@
 import SystemButton from "./SystemButton";
+import React, { useState, useRef, useEffect } from "react";
 
 function SystemPanel({
   children,
   title = "",
   icon = null,
   onMouseDown = () => {},
+  onClick = () => setIsVisible(false),
   style = {},
 }) {
+  const [isVisible, setIsVisible] = useState(true);
+
+  if (!isVisible) return null; // Don't render if hidden
+
   return (
     <div
       style={style}
@@ -19,7 +25,7 @@ function SystemPanel({
             onMouseDown={onMouseDown}
           >
             <span className="font-bold ml-2">{title}</span>
-            <SystemButton text={" x "} />
+            <SystemButton text={"\u2715"} onClick={onClick} />
           </div>
           {children}
         </div>
