@@ -6,7 +6,7 @@ function SystemPanel({
   title = "",
   icon = null,
   onMouseDown = () => {},
-  onClick = () => setIsVisible(false),
+  onClick = null,
   style = {},
 }) {
   const [isVisible, setIsVisible] = useState(true);
@@ -25,7 +25,12 @@ function SystemPanel({
             onMouseDown={onMouseDown}
           >
             <span className="font-bold ml-2">{title}</span>
-            <SystemButton text={"\u2715"} onClick={onClick} />
+            {!onClick && (
+              <SystemButton
+                text={"\u2715"}
+                onClick={() => setIsVisible(false)}
+              />
+            )}
           </div>
           {children}
         </div>

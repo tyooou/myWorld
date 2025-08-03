@@ -56,10 +56,10 @@ export default function DetailsTab({
         </div>
       </div>
 
-      <label className="block text-[9px] mb-1 ml-[0.125rem]">Tags</label>
-      <div className="flex flex-wrap gap-2 mb-3">
+      <label className="block text-[9px] ml-[0.125rem]">Tags</label>
+      <div className="flex flex-col gap-2 mb-3">
         {tags.map((tag) => (
-          <div key={tag.id} className="relative inline-block">
+          <div key={tag.id} className="relative">
             <button
               type="button"
               onClick={() =>
@@ -80,13 +80,9 @@ export default function DetailsTab({
             >
               {tag.tag_name}
             </button>
-            <button
-              onClick={() => deleteTag(tag.id)}
-              title="Delete tag"
-              className="absolute -top-1 -right-1 w-5 h-5  bg-white text-red-600 border border-red-600 flex items-center justify-center cursor-pointer"
-            >
-              ×
-            </button>
+            <div className="absolute -top-1 -right-1 ">
+              <SysButton text={"\u2715"} onClick={() => deleteTag(tag.id)} />
+            </div>
           </div>
         ))}
       </div>
@@ -104,12 +100,10 @@ export default function DetailsTab({
       {/* Custom Tag Input */}
       {showCustomInput && (
         <div className="mt-2 flex flex-wrap gap-2 items-center">
-          <input
-            type="text"
+          <SystemTextInput
             value={customTag}
             onChange={(e) => setCustomTag(e.target.value)}
-            placeholder="Custom tag"
-            className="flex-grow px-2 py-1  border border-gray-300  focus:outline-none focus:ring-2 focus:ring-blue-400"
+            placeholder="Enter tag name."
           />
           <input
             type="color"
