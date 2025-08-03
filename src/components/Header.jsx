@@ -28,13 +28,6 @@ function Header({ onShowProfile, onShowFriends}) {
           setActive={handleSetActive}
         />
       </div>
-      <div className="flex space-x-2 p-1 font-[pixel]">
-        <button onClick={onShowProfile}>Profile</button>
-        <button onClick={onShowFriends}>Friends</button>
-        
-
-      </div>
-
     </div>
   );
 }

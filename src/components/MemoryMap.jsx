@@ -455,8 +455,8 @@ mapboxgl.accessToken = "pk.eyJ1IjoiZWJvcndlZWQiLCJhIjoiY21kdG1mcjNkMHBneTJsb24zZ
 
 return (
   <div style={{ position: "relative", width: "100vw", height: "100vh" }}>
-    {/* Timeline Toggle Button - Top Right */}
-    <div className="absolute top-2 right-2 z-[1000] font-[pixel] text-[10px] flex space-x-2">
+    {/* Timeline Toggle Button - Below Header */}
+    <div className="absolute top-12 right-2 z-[1000] font-[pixel] text-[10px]">
       <SystemButton 
         text={showTimeline ? 'Hide Timeline' : 'Show Timeline'}
         onClick={toggleTimeline}
@@ -469,7 +469,7 @@ return (
         onClick={onBack}
         style={{
           position: "absolute",
-          top: "10px",
+          top: "12px",
           right: "10px",
           zIndex: 20,
           padding: "8px 12px",

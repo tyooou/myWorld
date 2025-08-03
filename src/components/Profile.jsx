@@ -2,6 +2,7 @@ import { React, useState, useRef, useEffect } from "react";
 import SystemPanel from "./system/SystemPanel";
 import SystemButton from "./system/SystemButton";
 import SystemLabel from "./system/SystemLabel";
+import { oshan_data } from "../Data/UserData";
 
 const clamp = (val, min, max) => Math.min(Math.max(val, min), max);
 
@@ -15,7 +16,7 @@ const jamals_data = {
 };
 
 export default function Profile({ onClose }) {
-  const { username, age, hometown } = jamals_data.profile;
+  const { username, age, hometown } = oshan_data.profile;
 
   const [pos, setPos] = useState({ x: 60, y: 60 });
   const dragData = useRef({

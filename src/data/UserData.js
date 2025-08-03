@@ -102,8 +102,7 @@ export const diddyani_data = {
       voiceMemo: 'tower-ambience.webm',
       country: 'Mexico',
       tag: 'family',
-      coordinate: { lat: 21.2329, lng: -86.7165 },
-      date: '2023-06-21'
+      coordinate: { lat: 21.1619, lng: -86.8515 }  // corrected to Cancun coordinates
     },
     {
       title: 'Queens Town with Friends!',
@@ -146,8 +145,8 @@ export const tyou_data = {
       date: '2023-02-14'
     },
     {
-      title: "Wet'n'Wild",
-      journal: "Rode the giant slides at Wet'n'Wild...",
+      title: 'Wet’n’Wild',
+      journal: "Rode the giant slides at Wet’n’Wild Gold Coast and surfed the waves at Surfers Paradise. Sunshine, salt water, and adrenaline made it one of my most thrilling days.",
       files: ['IMG_20250109_234143_812.jpg'],
       voiceMemo: null,
       country: 'Australia',
@@ -177,7 +176,7 @@ export const ibra_data = {
   memories: [
     {
       title: 'Cafe Hopping',
-      journal: "I spent the afternoon exploring hidden coffee shops...",
+      journal: "I spent the afternoon exploring hidden coffee shops in Bangkok’s Thonglor district, sipping aromatic brews and sampling local pastries at each stop.",
       files: ['ibra1.jpg'],
       voiceMemo: 'tower-ambience.webm',
       country: 'Thailand',
@@ -225,25 +224,6 @@ export const oshan_data = {
       coordinate: { lat: 5.9480, lng: 80.4515 },
       date: '2023-05-17'
     },
-    {
-      title: 'Mountain Hike',
-      journal: "Climbed to the summit for sunrise views...",
-      files: ['oshan3.jpg'],
-      voiceMemo: null,
-      country: 'Nepal',
-      tag: 'adventure',
-      coordinate: { lat: 27.9881, lng: 86.9250 },
-      date: '2022-10-10'
-    },
-    {
-      title: 'City Exploration',
-      journal: "Discovered hidden alleys and local markets...",
-      files: ['oshan4.jpg'],
-      voiceMemo: null,
-      country: 'Japan',
-      tag: 'culture',
-      coordinate: { lat: 35.6762, lng: 139.6503 },
-      date: '2023-01-15'
-    }
+    
   ]
 };
