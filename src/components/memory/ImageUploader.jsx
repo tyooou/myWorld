@@ -2,24 +2,28 @@ import React, { useState } from "react";
 import SystemLabel from "../system/SystemLabel";
 import SystemUpload from "../system/SystemUpload";
 
-export default function ImageUploader({ onSave }) {
-  const [imagePreviews, setImagePreviews] = useState([]);
+export default function ImageUploader({ newMemory, onSave }) {
+  const [imagePreviews, setImagePreviews] = useState(
+    newMemory.files?.map((f) => f) || []
+  );
+  const [selectedImage, setSelectedImage] = useState(null);
 
   const handleImageChange = (e) => {
     const files = Array.from(e.target.files);
     if (files.length === 0) return;
 
-    const previews = [];
+    const previews = [...newMemory.files];
+    let loaded = 0;
 
     files.forEach((file) => {
       const reader = new FileReader();
       reader.onloadend = () => {
         previews.push({ file, preview: reader.result });
+        loaded++;
 
-        // Wait until all files are processed
-        if (previews.length === files.length) {
+        if (loaded === files.length) {
           setImagePreviews(previews.map((p) => p.preview));
-          if (onSave) onSave(previews); // pass array of {file, preview}
+          if (onSave) onSave(previews);
         }
       };
       reader.readAsDataURL(file);
@@ -47,17 +51,47 @@ export default function ImageUploader({ onSave }) {
                 key={idx}
                 src={url}
                 alt={`Uploaded ${idx + 1}`}
+                onClick={() => setSelectedImage(url)}
                 style={{
                   maxWidth: "100px",
                   maxHeight: "100px",
-                  borderRadius: "6px",
                   border: "2px solid #ccc",
                   boxShadow: "2px 2px 6px rgba(0,0,0,0.2)",
                   objectFit: "cover",
+                  cursor: "pointer",
                 }}
               />
             ))}
           </div>
+        </div>
+      )}
+
+      {selectedImage && (
+        <div
+          onClick={() => setSelectedImage(null)}
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            width: "100vw",
+            height: "100vh",
+            backgroundColor: "rgba(0, 0, 0, 0.8)",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            zIndex: 1000,
+            cursor: "zoom-out",
+          }}
+        >
+          <img
+            src={selectedImage}
+            alt="Full view"
+            style={{
+              maxWidth: "90%",
+              maxHeight: "90%",
+              boxShadow: "0 0 20px rgba(255,255,255,0.2)",
+            }}
+          />
         </div>
       )}
     </div>
