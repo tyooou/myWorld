@@ -1,17 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import { jamals_data, daves_data, diddyani_data } from './Data/UserData.js';
-import SignUp from './logins/SignUp.jsx';
-import Login from './logins/Login.jsx';
-import Header from './components/Header.jsx';
-import MemoryMap from './components/MemoryMap.jsx';
-import Footer from './components/Footer.jsx';
-import FriendsList from './components/FriendsList.jsx';
-import Profile from './components/Profile.jsx';
-
-
-
-
-
+import React, { useState, useEffect } from "react";
+import { jamals_data, daves_data, diddyani_data } from "./Data/UserData.js";
+import SignUp from "./logins/SignUp.jsx";
+import Login from "./logins/Login.jsx";
+import Header from "./components/Header.jsx";
+import MemoryMap from "./components/MemoryMap.jsx";
+import Footer from "./components/Footer.jsx";
+import FriendsList from "./components/FriendsList.jsx";
+import Profile from "./components/Profile.jsx";
 
 const ProfileOverlay = ({ onClose }) => (
  <Profile onClose={onClose}/>
@@ -30,14 +25,12 @@ const FriendsOverlay = ({ onClose, changeMap }) => (
 
 
 export default function App() {
- // 1. All hooks must be unconditionally at top
- const [view, setView] = useState('signup');                // 'signup' | 'login' | 'map'
- const [currentView, setCurrentView] = useState(null);      // for Profile/Friends overlays
- const [currentUser, setCurrentUser] = useState(daves_data); // 'jamals' | 'daves' | 'diddyani'
- const [perms,setPerms] = useState(true)
-
-
-
+  // 1. All hooks must be unconditionally at top
+  const [view, setView] = useState("login"); // 'signup' | 'login' | 'map'
+  const [userData, setUserData] = useState(jamals_data);
+  const [currentView, setCurrentView] = useState(null); // for Profile/Friends overlays
+  const [currentUser, setCurrentUser] = useState(daves_data); // 'jamals' | 'daves' | 'diddyani'
+  const [perms, setPerms] = useState(true);
 
  useEffect(() => {
   
@@ -62,31 +55,13 @@ export default function App() {
   
   }, []);
 
+  // 2. Handlers to swap between views
+  const handleSignUp = () => setView("login");
+  const handleSwitchToLogin = () => setView("login");
+  const handleLogin = () => setView("map");
+  const handleSwitchToSignUp = () => setView("signup");
 
- // 2. Handlers to swap between views
- const handleSignUp = () => setView('login');
- const handleSwitchToLogin = () => setView('login');
- const handleLogin = () => setView('map');
- const handleSwitchToSignUp = () => setView('signup');
-
-
- // 3. Early returns for 'signup' & 'login'
- if (view === 'signup') {
-   return (
-     <SignUp
-       onSignUp={handleSignUp}
-       onSwitchToLogin={handleSwitchToLogin}
-     />
-   );
- }
- if (view === 'login') {
-   return (
-     <Login
-       onLogin={handleLogin}
-       onSwitchToSignUp={handleSwitchToSignUp}
-     />
-   );
- }
+  // 3. Early returns for 'signup' & 'login'
 
 
 const changeMap = (friend) => {
@@ -102,37 +77,37 @@ const onBack = () => {
   setPerms(true); // Reset permission to true
 };
 
+  const renderOverlay = () => {
+    if (currentView === "profile") {
+      return <ProfileOverlay onClose={() => setCurrentView(null)} />;
+    }
+    if (currentView === "friends") {
+      return (
+        <FriendsOverlay
+          onClose={() => setCurrentView(null)}
+          changeMap={changeMap}
+        />
+      );
+    }
+    if (view === "login") {
+      return (
+        <Login onLogin={handleLogin} onSwitchToSignUp={handleSwitchToSignUp} />
+      );
+    }
+    return null;
+  };
 
-
-
-const renderOverlay = () => {
- if (currentView === "profile") {
-   return <ProfileOverlay onClose={() => setCurrentView(null)} />;
- }
- if (currentView === "friends") {
-   return <FriendsOverlay onClose={() => setCurrentView(null)} changeMap={changeMap} />;
- }
- return null;
-};
-
-
-
-
-
-
-
-
-return (
- <>
-     <Header
-     onShowProfile={() => setCurrentView("profile")}
-     onShowFriends={() => setCurrentView("friends")}
-   />
-   {renderOverlay()}
-    <MemoryMap name={currentUser} permission={perms} onBack={onBack}/>
-    <Footer />
- </>
-);
+  return (
+    <>
+      <Header
+        onShowProfile={() => setCurrentView("profile")}
+        onShowFriends={() => setCurrentView("friends")}
+      />
+      {renderOverlay()}
+      <MemoryMap name={currentUser} permission={perms} onBack={onBack} />
+      <Footer />
+    </>
+  );
 }
 
 
