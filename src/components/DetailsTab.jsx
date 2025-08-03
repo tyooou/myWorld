@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
 export default function DetailsTab({
   newMemory,
@@ -15,96 +15,96 @@ export default function DetailsTab({
   addCustomTag,
   deleteTag
 }) {
+  // Initialize date with current date if not already set
+  useEffect(() => {
+    if (!newMemory.date) {
+      const today = new Date();
+      // Format as YYYY-MM-DD (ISO format for date inputs)
+      const formattedDate = today.toISOString().split('T')[0];
+      setNewMemory(prev => ({ ...prev, date: formattedDate }));
+    }
+  }, [setNewMemory]);
+
+  const handleDateChange = (e) => {
+    const selectedDate = e.target.value;
+    if (!selectedDate) {
+      // If date is cleared, reset to today's date
+      const today = new Date().toISOString().split('T')[0];
+      setNewMemory(prev => ({ ...prev, date: today }));
+      return;
+    }
+    setNewMemory(prev => ({ ...prev, date: selectedDate }));
+  };
+
   return (
     <div>
       {/* Title Input */}
-      <label>Title</label>
+      <label className="block text-sm font-medium text-gray-700 mb-1">Title</label>
       <input
         type="text"
         value={newMemory.title}
         onChange={e => setNewMemory({ ...newMemory, title: e.target.value })}
         placeholder="Memory title"
-        style={{ width: '100%', marginTop: 4, marginBottom: 10 }}
+        className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 mb-3"
+        required
+      />
+
+      {/* Date Input - Compulsory */}
+      <label className="block text-sm font-medium text-gray-700 mb-1">Date</label>
+      <input
+        type="date"
+        value={newMemory.date || new Date().toISOString().split('T')[0]}
+        onChange={handleDateChange}
+        className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 mb-3"
+        required
       />
 
       {/* Visibility Toggle */}
-      <div style={{ marginBottom: 12 }}>
-        <label style={{ fontWeight: 'bold', marginRight: 10 }}>Visibility:</label>
-        <div
-          style={{
-            display: 'inline-flex',
-            border: '1px solid #ccc',
-            borderRadius: '20px',
-            overflow: 'hidden',
-            cursor: 'pointer',
-          }}
-        >
-          <div
+      <div className="mb-3">
+        <label className="block text-sm font-medium text-gray-700 mb-1">Visibility:</label>
+        <div className="inline-flex border border-gray-300 rounded-full overflow-hidden">
+          <button
+            type="button"
             onClick={() => setNewMemory({ ...newMemory, isPrivate: true })}
-            style={{
-              padding: '6px 12px',
-              backgroundColor: newMemory.isPrivate ? '#3498db' : '#f0f0f0',
-              color: newMemory.isPrivate ? '#fff' : '#333',
-              fontWeight: newMemory.isPrivate ? 'bold' : 'normal',
-            }}
+            className={`px-3 py-1 text-sm ${newMemory.isPrivate ? 'bg-blue-600 text-white font-semibold' : 'bg-gray-100 text-gray-700'}`}
           >
             Private
-          </div>
-          <div
+          </button>
+          <button
+            type="button"
             onClick={() => setNewMemory({ ...newMemory, isPrivate: false })}
-            style={{
-              padding: '6px 12px',
-              backgroundColor: !newMemory.isPrivate ? '#2ecc71' : '#f0f0f0',
-              color: !newMemory.isPrivate ? '#fff' : '#333',
-              fontWeight: !newMemory.isPrivate ? 'bold' : 'normal',
-            }}
+            className={`px-3 py-1 text-sm ${!newMemory.isPrivate ? 'bg-green-600 text-white font-semibold' : 'bg-gray-100 text-gray-700'}`}
           >
             Public
-          </div>
+          </button>
         </div>
       </div>
 
       {/* Tag Section */}
-      <label style={{ fontWeight: 'bold' }}>Tags</label>
-      <div style={{ marginTop: 6, display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+      <label className="block text-sm font-medium text-gray-700 mb-1">Tags</label>
+      <div className="flex flex-wrap gap-2 mb-3">
         {tags.map((tag) => (
-          <div key={tag.id} style={{ position: 'relative', display: 'inline-block' }}>
+          <div key={tag.id} className="relative">
             <button
               type="button"
               onClick={() => setSelectedTag(selectedTag === tag.id ? null : tag.id)}
+              className={`px-3 py-1 text-xs rounded-md ${selectedTag === tag.id ? 'ring-2 ring-offset-1' : ''}`}
               style={{
-                padding: '6px 12px',
-                borderRadius: '8px',
-                fontSize: '12px',
-                fontWeight: '500',
-                border: `1px solid ${tag.colour}`,
                 backgroundColor: tag.colour,
                 color: '#fff',
+                border: `1px solid ${tag.colour}`,
                 boxShadow: selectedTag === tag.id ? `0 0 0 3px ${tag.colour}66` : 'none',
-                cursor: 'pointer'
               }}
             >
               {tag.tag_name}
             </button>
             <button
-              onClick={() => deleteTag(tag.id)}
-              title="Delete tag"
-              style={{
-                position: 'absolute',
-                top: '-6px',
-                right: '-6px',
-                width: '18px',
-                height: '18px',
-                fontSize: '12px',
-                background: '#fff',
-                color: '#e74c3c',
-                borderRadius: '9999px',
-                border: '1px solid #e74c3c',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                cursor: 'pointer'
+              onClick={(e) => {
+                e.stopPropagation();
+                deleteTag(tag.id);
               }}
+              title="Delete tag"
+              className="absolute -top-2 -right-2 w-5 h-5 flex items-center justify-center bg-white text-red-500 rounded-full border border-red-500 text-xs"
             >
               ×
             </button>
@@ -115,17 +115,9 @@ export default function DetailsTab({
       {/* Add Custom Tag Button */}
       {!showCustomInput && (
         <button
+          type="button"
           onClick={() => setShowCustomInput(true)}
-          style={{
-            marginTop: '10px',
-            padding: '6px 10px',
-            fontSize: '12px',
-            borderRadius: '6px',
-            backgroundColor: '#3498db',
-            color: '#fff',
-            border: 'none',
-            cursor: 'pointer'
-          }}
+          className="mt-2 px-3 py-1 bg-blue-600 text-white text-sm rounded-md hover:bg-blue-700"
         >
           + Add Custom Tag
         </button>
@@ -133,65 +125,31 @@ export default function DetailsTab({
 
       {/* Custom Tag Input */}
       {showCustomInput && (
-        <div
-          style={{
-            marginTop: '10px',
-            display: 'flex',
-            gap: '8px',
-            flexWrap: 'wrap',
-            alignItems: 'center'
-          }}
-        >
+        <div className="mt-3 flex flex-wrap items-center gap-2">
           <input
             type="text"
             value={customTag}
             onChange={(e) => setCustomTag(e.target.value)}
             placeholder="Custom tag"
-            style={{
-              padding: '6px',
-              fontSize: '12px',
-              border: '1px solid #ccc',
-              borderRadius: '6px',
-              flex: '1 1 auto'
-            }}
+            className="flex-1 min-w-[120px] px-2 py-1 text-sm border border-gray-300 rounded-md"
           />
           <input
             type="color"
             value={customTagColor}
             onChange={(e) => setCustomTagColor(e.target.value)}
-            style={{
-              padding: '6px',
-              width: '40px',
-              height: '40px',
-              border: '1px solid #ccc',
-              borderRadius: '6px'
-            }}
+            className="w-10 h-10 border border-gray-300 rounded-md cursor-pointer"
           />
           <button
             type="button"
             onClick={addCustomTag}
-            style={{
-              backgroundColor: '#2ecc71',
-              color: '#fff',
-              padding: '6px 10px',
-              borderRadius: '6px',
-              fontSize: '12px',
-              cursor: 'pointer'
-            }}
+            className="px-3 py-1 bg-green-600 text-white text-sm rounded-md hover:bg-green-700"
           >
             Add
           </button>
           <button
             type="button"
             onClick={() => setShowCustomInput(false)}
-            style={{
-              backgroundColor: '#e0e0e0',
-              color: '#333',
-              padding: '6px 10px',
-              borderRadius: '6px',
-              fontSize: '12px',
-              cursor: 'pointer'
-            }}
+            className="px-3 py-1 bg-gray-200 text-gray-700 text-sm rounded-md hover:bg-gray-300"
           >
             Cancel
           </button>
