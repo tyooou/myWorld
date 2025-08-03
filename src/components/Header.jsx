@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import SystemTabs from "./system/SystemTabs";
+import SystemButton from "./system/SystemButton";
 
-function Header({ onShowProfile, onShowFriends }) {
+function Header({ onShowProfile, onShowFriends}) {
   const options = ["Profile", "Friends"];
   const [activeTab, setActiveTab] = useState("");
 
@@ -14,7 +15,7 @@ function Header({ onShowProfile, onShowFriends }) {
       onShowFriends();
     }
   }
-
+  
   return (
     <div className="absolute top-0 left-0 w-full bg-gray-200 text-gray-800 flex flex-col z-10 text-[9px] ">
       <div className="bg-gradient-to-r from-blue-900 to-green-500 text-white p-1 font-[pixel]">
@@ -32,3 +33,4 @@ function Header({ onShowProfile, onShowFriends }) {
 }
 
 export default Header;
+

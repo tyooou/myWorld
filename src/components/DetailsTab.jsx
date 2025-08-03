@@ -80,8 +80,9 @@ export default function DetailsTab({
         </div>
       </div>
 
-      <label className="block text-[9px] ml-[0.125rem]">Tags</label>
-      <div className="flex flex-col gap-2 mb-3">
+      {/* Tag Section */}
+      <label className="block text-sm font-medium text-gray-700 mb-1">Tags</label>
+      <div className="flex flex-wrap gap-2 mb-3">
         {tags.map((tag) => (
           <div key={tag.id} className="relative">
             <button
@@ -97,14 +98,16 @@ export default function DetailsTab({
             >
               {tag.tag_name}
             </button>
-            <div className="absolute -top-1 -right-1 ">
-              <button 
-                className="text-xs bg-red-500 text-white rounded-full w-4 h-4 flex items-center justify-center"
-                onClick={() => deleteTag(tag.id)}
-              >
-                ×
-              </button>
-            </div>
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                deleteTag(tag.id);
+              }}
+              title="Delete tag"
+              className="absolute -top-2 -right-2 w-5 h-5 flex items-center justify-center bg-white text-red-500 rounded-full border border-red-500 text-xs"
+            >
+              ×
+            </button>
           </div>
         ))}
       </div>
@@ -128,7 +131,7 @@ export default function DetailsTab({
             value={customTag}
             onChange={(e) => setCustomTag(e.target.value)}
             placeholder="Custom tag"
-            className="flex-grow px-2 py-1 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400"
+            className="flex-1 min-w-[120px] px-2 py-1 text-sm border border-gray-300 rounded-md"
           />
           <input
             type="color"

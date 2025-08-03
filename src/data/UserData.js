@@ -1,4 +1,3 @@
-// Fake user data including profile and initial memories
 export const jamals_data = {
   profile: {
     age: 21,
@@ -8,30 +7,33 @@ export const jamals_data = {
   memories: [
     {
       title: "Melbourne Skyline",
-      journal: "I woke before dawn to catch the sunrise over Melbourne’s skyline. The streets were quiet and the skyscrapers along the Yarra River glowed in soft pastel light as the city came to life.",
-      files: ['IMG_1716.jpg'],           
+      journal: "I woke before dawn to catch the sunrise over Melbourne's skyline...",
+      files: ['IMG_1716.jpg'],
       voiceMemo: 'melbourne-ambience.webm',
       country: 'Australia',
       tag: 'travel',
-      coordinate: { lat: -37.8136, lng: 144.9631 }
+      coordinate: { lat: -37.8136, lng: 144.9631 },
+      date: '2023-03-15'
     },
     {
       title: 'Top of New Zealand',
-      journal: "I journeyed to Cape Reinga, the northern-most tip of the North Island. Standing where the Tasman Sea meets the Pacific Ocean, I felt the wild wind whip around the lighthouse and watched two oceans collide on the horizon.",
+      journal: "I journeyed to Cape Reinga, the northern-most tip...",
       files: ['IMG_1597.jpg'],
       voiceMemo: null,
       country: 'New Zealand',
       tag: 'adventure',
-      coordinate: { lat: -34.4278, lng: 172.6811 }
+      coordinate: { lat: -34.4278, lng: 172.6811 },
+      date: '2023-01-22'
     },
     {
       title: 'Motorcycle Ride Through the Nights of Vietnam',
-      journal: "Zoomed through the bustling streets of Hanoi on a motorbike at night, neon lights reflecting off wet pavement while the scent of street-food stalls and incense filled the air.",
+      journal: "Zoomed through the bustling streets of Hanoi on a motorbike...",
       files: ['IMG_1346.jpg'],
       voiceMemo: 'hanoi-ride.webm',
       country: 'Vietnam',
       tag: 'travel',
-      coordinate: { lat: 21.0278, lng: 105.8342 }
+      coordinate: { lat: 21.0278, lng: 105.8342 },
+      date: '2022-11-08'
     }
   ]
 };
@@ -45,39 +47,43 @@ export const daves_data = {
   memories: [
     {
       title: 'Temple in Malaysia',
-      journal: "I climbed the colorful steps of Batu Caves near Kuala Lumpur, surrounded by worshippers and cheeky monkeys. The cavernous temple was bathed in golden light as incense smoke curled through the air.",
+      journal: "I climbed the colorful steps of Batu Caves...",
       files: ['IMG_9772.jpeg'],
       voiceMemo: 'wembley-crowd.webm',
-      country: 'Malaysia',                      // fixed country
+      country: 'Malaysia',
       tag: 'music',
-      coordinate: { lat: 3.2379, lng: 101.6831 } // updated coords
+      coordinate: { lat: 3.2379, lng: 101.6831 },
+      date: '2023-04-03'
     },
     {
       title: 'Singapore Exchange',
-      journal: "I toured the bustling trading floor of the Singapore Exchange, marveling at the digital tickers and the energy of brokers making deals in the heart of downtown.",
+      journal: "I toured the bustling trading floor...",
       files: ['SAM_7621.jpeg'],
       voiceMemo: 'wembley-crowd.webm',
-      country: 'Singapore',                    // fixed country/spelling
+      country: 'Singapore',
       tag: 'music',
-      coordinate: { lat: 1.3521, lng: 103.8198 }
+      coordinate: { lat: 1.3521, lng: 103.8198 },
+      date: '2023-02-18'
     },
     {
       title: 'Mt. Ruapehu Ski Trip',
-      journal: "Skiing down the slopes of Mt. Ruapehu was exhilarating—snow flew up around my skis and the volcanic peak loomed above, clouds swirling in the crisp air.",
-      files: ['DSCF6753.jpeg', 'DSCF6754.jpeg'],
+      journal: "Skiing down the slopes of Mt. Ruapehu...",
+      files: ['DSCF6743.jpeg', 'DSCF6754.jpeg'],
       voiceMemo: null,
-      country: 'New Zealand',                  // fixed country
+      country: 'New Zealand',
       tag: 'travel',
-      coordinate: { lat: -39.2812, lng: 175.6077 }
+      coordinate: { lat: -39.2812, lng: 175.6077 },
+      date: '2022-07-12'
     },
     {
       title: 'Buddhist Temple in Hong Kong',
-      journal: "I visited the Po Lin Monastery on Lantau Island, listening to bells echo across the misty courtyard and admiring the giant statue of Tian Tan Buddha.",
+      journal: "I visited the Po Lin Monastery...",
       files: ['IMG_2498.jpeg', 'IMG_2558.jpeg'],
       voiceMemo: 'market-bells.webm',
-      country: 'Hong Kong',                    // fixed country
+      country: 'Hong Kong',
       tag: 'adventure',
-      coordinate: { lat: 22.3964, lng: 114.1095 }
+      coordinate: { lat: 22.3964, lng: 114.1095 },
+      date: '2023-05-29'
     }
   ]
 };
@@ -91,7 +97,7 @@ export const diddyani_data = {
   memories: [
     {
       title: 'Isla Pasion with the FAM',
-      journal: "Spent a sun-soaked day with family on Isla Pasion, snorkeling in turquoise Caribbean waters and picnicking on white-sand beaches just off the coast of Playa Del Carmen.",
+      journal: "Spent a sun-soaked day with family...",
       files: ['arni1.jpg', 'arni2.jpg', 'arni3.jpg'],
       voiceMemo: 'tower-ambience.webm',
       country: 'Mexico',
@@ -100,21 +106,23 @@ export const diddyani_data = {
     },
     {
       title: 'Queens Town with Friends!',
-      journal: "Arrived in Queenstown, New Zealand with friends and tested our limits bungee jumping over the Kawarau River before celebrating with lakeside dinners and craft beers.",
+      journal: "Arrived in Queenstown, New Zealand...",
       files: ['arni6.jpg', 'arni7.jpg', 'arni8.jpg'],
       voiceMemo: null,
       country: 'New Zealand',
       tag: 'adventure',
-      coordinate: { lat: -45.0312, lng: 168.6626 }
+      coordinate: { lat: -45.0312, lng: 168.6626 },
+      date: '2022-12-30'
     },
     {
       title: 'Professional Big Back in AMERICA',
-      journal: "Embarked on a cross-country road trip along Route 66, stopping at neon diners, vintage motels, and iconic landmarks from Chicago to Santa Monica.",
+      journal: "Embarked on a cross-country road trip...",
       files: ['arni4.jpg', 'arni5.jpg'],
       voiceMemo: 'vineyard-sounds.webm',
       country: 'USA',
       tag: 'road trip',
-      coordinate: { lat: 39.8283, lng: -98.5795 }
+      coordinate: { lat: 39.8283, lng: -98.5795 },
+      date: '2023-08-14'
     }
   ]
 };
@@ -128,30 +136,33 @@ export const tyou_data = {
   memories: [
     {
       title: 'First Kiss',
-      journal: "Under the neon lights of Gangnam district, I shared my first kiss atop a rooftop bar. The city’s energy pulsed below as we laughed under the stars.",
+      journal: "Under the neon lights of Gangnam district...",
       files: ['Screenshot_20250306_081853_Instagram.jpg'],
       voiceMemo: 'tower-ambience.webm',
       country: 'South Korea',
       tag: 'romance',
-      coordinate: { lat: 37.4979, lng: 127.0276 }
+      coordinate: { lat: 37.4979, lng: 127.0276 },
+      date: '2023-02-14'
     },
     {
-      title: 'Wet n Wild',
-      journal: "Rode the giant slides at Wet n Wild Gold Coast and surfed the waves at Surfers Paradise. Sunshine, salt water, and adrenaline made it one of my most thrilling days.",
+      title: 'Wet’n’Wild',
+      journal: "Rode the giant slides at Wet’n’Wild Gold Coast and surfed the waves at Surfers Paradise. Sunshine, salt water, and adrenaline made it one of my most thrilling days.",
       files: ['IMG_20250109_234143_812.jpg'],
       voiceMemo: null,
       country: 'Australia',
       tag: 'adventure',
-      coordinate: { lat: -28.0167, lng: 153.4000 }
+      coordinate: { lat: -28.0167, lng: 153.4000 },
+      date: '2023-01-09'
     },
     {
       title: 'First American Election',
-      journal: "Stood in line at a polling station in Houston, Texas, and cast my first-ever vote in a U.S. election. It felt surreal to participate in the democratic process.",
+      journal: "Stood in line at a polling station...",
       files: ['IMG_20250109_234143_840.jpg'],
       voiceMemo: 'vineyard-sounds.webm',
       country: 'USA',
       tag: 'politics',
-      coordinate: { lat: 29.7604, lng: -95.3698 }
+      coordinate: { lat: 29.7604, lng: -95.3698 },
+      date: '2022-11-08'
     }
   ]
 };
@@ -165,30 +176,33 @@ export const ibra_data = {
   memories: [
     {
       title: 'Cafe Hopping',
-      journal: "I spent the afternoon exploring hidden coffee shops in Bangkoks Thonglor district, sipping aromatic brews and sampling local pastries at each stop.",
+      journal: "I spent the afternoon exploring hidden coffee shops in Bangkok’s Thonglor district, sipping aromatic brews and sampling local pastries at each stop.",
       files: ['ibra1.jpg'],
       voiceMemo: 'tower-ambience.webm',
       country: 'Thailand',
       tag: 'food & drink',
-      coordinate: { lat: 13.7367, lng: 100.5684 }
+      coordinate: { lat: 13.7367, lng: 100.5684 },
+      date: '2023-04-05'
     },
     {
       title: '10m from Chaewon',
-      journal: "CHAEWON CHAEWON CHAEWON CHAEWON CHAEWON CHAEWON CHAEWON CHAEWON CHAEWON CHAEWON CHAEWON CHAEWON CHAEWON CHAEWON CHAEWON CHAEWON CHAEWON CHAEWON ",
+      journal: "CHAEWON CHAEWON CHAEWON...",
       files: ['ibra2.jpg'],
       voiceMemo: null,
       country: 'South Korea',
       tag: 'culture, kpop, music',
-      coordinate: { lat: 37.5665, lng: 126.9780 }
+      coordinate: { lat: 37.5665, lng: 126.9780 },
+      date: '2023-07-22'
     },
     {
       title: 'Cherry Blossom Season',
-      journal: "Wandered through the cherry blossoms at Osaka Castle Park, petals drifting like pink snow as families picnicked and poets composed haiku beneath the blooming trees.",
+      journal: "Wandered through the cherry blossoms...",
       files: ['ibra3.jpg'],
       voiceMemo: 'vineyard-sounds.webm',
       country: 'Japan',
       tag: 'nature',
-      coordinate: { lat: 34.6937, lng: 135.5023 }
+      coordinate: { lat: 34.6937, lng: 135.5023 },
+      date: '2023-03-28'
     }
   ]
 };
@@ -202,12 +216,14 @@ export const oshan_data = {
   memories: [
     {
       title: 'Beach Resort in Sri Lanka',
-      journal: "Relaxed on the golden sands of Mirissa Beach, watching fishing boats drift across the Indian Ocean as the sun dipped below the horizon and palm trees swayed in the warm sea breeze.",
+      journal: "Relaxed on the golden sands of Mirissa Beach...",
       files: ['oshan1.jpg', 'oshan2.jpg'],
       voiceMemo: 'tower-ambience.webm',
       country: 'Sri Lanka',
       tag: 'relaxation',
-      coordinate: { lat: 5.9480, lng: 80.4515 }
-    }
+      coordinate: { lat: 5.9480, lng: 80.4515 },
+      date: '2023-05-17'
+    },
+    
   ]
 };
