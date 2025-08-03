@@ -1,11 +1,13 @@
-import React, { useRef, useEffect, useState } from "react";
-import mapboxgl from "mapbox-gl";
-import "mapbox-gl/dist/mapbox-gl.css";
-import "./MemoryMap.css";
-import NewMemoryForm from "./memory/NewMemoryForm.jsx";
+import React, { useRef, useEffect, useState } from 'react';
+import mapboxgl from 'mapbox-gl';
+import 'mapbox-gl/dist/mapbox-gl.css';
+import './MemoryMap.css';
 
-mapboxgl.accessToken =
-  "pk.eyJ1IjoiZWJvcndlZWQiLCJhIjoiY21kdG1mcjNkMHBneTJsb24zZzdsZHQycyJ9.B6OMNYu8tzRTiYXh5xLOpQ";
+import SavedDetails from './memory/SavedDetails.jsx';
+import NewMemoryForm from './memory/NewMemoryForm.jsx';
+
+
+mapboxgl.accessToken = 'pk.eyJ1IjoiZWJvcndlZWQiLCJhIjoiY21kdG1mcjNkMHBneTJsb24zZzdsZHQycyJ9.B6OMNYu8tzRTiYXh5xLOpQ';
 
 export default function MemoryMap({ name, permission, onBack }) {
   const mapContainer = useRef(null);
@@ -14,6 +16,8 @@ export default function MemoryMap({ name, permission, onBack }) {
   const rafRef = useRef(null);
   const [memories, setMemories] = useState(name?.memories || []);
   const [isSwitchingUser, setIsSwitchingUser] = useState(false);
+
+
 
 useEffect(() => {
   setIsSwitchingUser(true);
@@ -35,7 +39,7 @@ useEffect(() => {
     waitUntilReady();
   }, [memories]);
   
-  
+  const [showPinDetail, setShowPinDetail] = useState(false);
   const [showForm, setShowForm] = useState(false);
   const [formPosition, setFormPosition] = useState({ lat: 0, lng: 0 });
   const [newMemory, setNewMemory] = useState({
@@ -76,7 +80,7 @@ useEffect(() => {
       if (isVisibleOnGlobe(center, { lat, lng })) {
         marker.getElement().style.display = '';
       } else {
-        marker.getElement().style.display = "none";
+        marker.getElement().style.display = 'none';
       }
     });
   };
@@ -107,7 +111,7 @@ useEffect(() => {
           coordinate: { lat, lng }
         });
         setFormPosition({ lat, lng });
-        setShowForm(true);
+        setShowPinDetail(true);
       });
   
       markerObjs.current.push({ mem, marker });
@@ -157,7 +161,7 @@ useEffect(() => {
   const handleFileChange = (e) => {
     setNewMemory({
       ...newMemory,
-      files: [...newMemory.files, ...Array.from(e.target.files)],
+      files: [...newMemory.files, ...Array.from(e.target.files)]
     });
   };
 
@@ -165,7 +169,7 @@ useEffect(() => {
     alert("Voice memo functionality would be implemented here");
     setNewMemory({
       ...newMemory,
-      voiceMemo: "voice-memo-placeholder.mp3",
+      voiceMemo: "voice-memo-placeholder.mp3"
     });
   };
 
@@ -204,17 +208,17 @@ useEffect(() => {
     mapInstance.current.flyTo({
       center: previousViewRef.current.center,
       zoom: previousViewRef.current.zoom,
-      essential: true,
+      essential: true
     });
   };
 
   useEffect(() => {
     mapInstance.current = new mapboxgl.Map({
       container: mapContainer.current,
-      style: "mapbox://styles/eborweed/cmdtnwc8b007x01srgmfwar2m",
+      style: 'mapbox://styles/eborweed/cmdtnwc8b007x01srgmfwar2m',
       center: previousViewRef.current.center,
       zoom: previousViewRef.current.zoom,
-      projection: "globe",
+      projection: 'globe',
       antialias: true,
     });
 
@@ -235,7 +239,7 @@ useEffect(() => {
 
         previousViewRef.current = {
           center: mapInstance.current.getCenter(),
-          zoom: mapInstance.current.getZoom(),
+          zoom: mapInstance.current.getZoom()
         };
 
         if (tempMarkerRef.current) {
@@ -257,9 +261,7 @@ useEffect(() => {
 
         tempMarkerRef.current = new mapboxgl.Marker(el)
           .setLngLat([lng, lat])
-          .setPopup(
-            new mapboxgl.Popup().setHTML("New memory location (unsaved)")
-          )
+          .setPopup(new mapboxgl.Popup().setHTML("New memory location (unsaved)"))
           .addTo(mapInstance.current)
           .togglePopup();
 
@@ -275,12 +277,6 @@ useEffect(() => {
           coordinate: { lat, lng }
         });
       });
-
-        // Sync visibility when the globe moves/rotates/etc.
-      mapInstance.current.on("move", updateMarkerVisibility);
-      mapInstance.current.on("rotate", updateMarkerVisibility);
-      mapInstance.current.on("pitch", updateMarkerVisibility);
-      mapInstance.current.on("zoom", updateMarkerVisibility);
 
       ['move', 'rotate', 'pitch', 'zoom'].forEach(eventName => {
         mapInstance.current.on(eventName, updateMarkerVisibility);
@@ -393,7 +389,7 @@ useEffect(() => {
           position: 'absolute',
           top: 0, left: 0, width: '100%', height: '100%',
           zIndex: 1,
-          pointerEvents: "none",
+          pointerEvents: 'none',
         }}
       />
 
@@ -404,7 +400,7 @@ useEffect(() => {
           position: 'absolute',
           top: 0, left: 0, width: '100%', height: '100%',
           zIndex: 2,
-          background: "transparent !important",
+          background: 'transparent !important'
         }}
       />
 
@@ -429,6 +425,19 @@ useEffect(() => {
 
       {showForm && (
         <NewMemoryForm
+          newMemory={newMemory}
+          setNewMemory={setNewMemory}
+          onFileChange={handleFileChange}
+          onVoiceMemo={handleVoiceMemo}
+          onSave={handleSave}
+          onCancel={handleCancel}
+        />
+      )}
+
+      {showPinDetail && (
+        <SavedDetails
+          memory={newMemory}
+          perms={permission}
           newMemory={newMemory}
           setNewMemory={setNewMemory}
           onFileChange={handleFileChange}
