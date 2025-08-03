@@ -1,229 +1,252 @@
 export const jamals_data = {
   profile: {
     age: 21,
-    username: 'wander_joe',
-    hometown: 'Paris'
+    username: "wander_joe",
+    hometown: "Paris",
   },
   memories: [
     {
       title: "Melbourne Skyline",
-      journal: "I woke before dawn to catch the sunrise over Melbourne's skyline...",
-      files: ['IMG_1716.jpg'],
-      voiceMemo: 'melbourne-ambience.webm',
-      country: 'Australia',
-      tag: 'travel',
+      journal:
+        "I woke before dawn to catch the sunrise over Melbourne's skyline...",
+      files: ["IMG_1716.jpg"],
+      voiceMemo: "melbourne-ambience.webm",
+      country: "Australia",
+      tag: "travel",
       coordinate: { lat: -37.8136, lng: 144.9631 },
-      date: '2023-03-15'
+      date: "2025-04-08",
     },
     {
-      title: 'Top of New Zealand',
+      title: "Top of New Zealand",
       journal: "I journeyed to Cape Reinga, the northern-most tip...",
-      files: ['IMG_1597.jpg'],
+      files: ["IMG_1597.jpg"],
       voiceMemo: null,
-      country: 'New Zealand',
-      tag: 'adventure',
+      country: "New Zealand",
+      tag: "adventure",
       coordinate: { lat: -34.4278, lng: 172.6811 },
-      date: '2023-01-22'
+      date: "2023-01-22",
     },
     {
-      title: 'Motorcycle Ride Through the Nights of Vietnam',
+      title: "Motorcycle Ride Through the Nights of Vietnam",
       journal: "Zoomed through the bustling streets of Hanoi on a motorbike...",
-      files: ['IMG_1346.jpg'],
-      voiceMemo: 'hanoi-ride.webm',
-      country: 'Vietnam',
-      tag: 'travel',
+      files: ["IMG_1346.jpg"],
+      voiceMemo: "hanoi-ride.webm",
+      country: "Vietnam",
+      tag: "travel",
       coordinate: { lat: 21.0278, lng: 105.8342 },
-      date: '2022-11-08'
-    }
-  ]
+      date: "2022-11-08",
+    },
+  ],
 };
 
 export const daves_data = {
   profile: {
     age: 20,
-    username: 'dave_explorer',
-    hometown: 'Kathmandu'
+    username: "dave_explorer",
+    hometown: "Kathmandu",
   },
   memories: [
     {
-      title: 'Temple in Malaysia',
+      title: "Temple in Malaysia",
       journal: "I climbed the colorful steps of Batu Caves...",
-      files: ['IMG_9772.jpeg'],
-      voiceMemo: 'wembley-crowd.webm',
-      country: 'Malaysia',
-      tag: 'music',
+      files: ["IMG_9772.jpeg"],
+      voiceMemo: "wembley-crowd.webm",
+      country: "Malaysia",
+      tag: "music",
       coordinate: { lat: 3.2379, lng: 101.6831 },
-      date: '2023-04-03'
+      date: "2025-03-10",
     },
     {
-      title: 'Singapore Exchange',
+      title: "Singapore Exchange",
       journal: "I toured the bustling trading floor...",
-      files: ['SAM_7621.jpeg'],
-      voiceMemo: 'wembley-crowd.webm',
-      country: 'Singapore',
-      tag: 'music',
+      files: ["SAM_7621.jpeg"],
+      voiceMemo: "wembley-crowd.webm",
+      country: "Singapore",
+      tag: "music",
       coordinate: { lat: 1.3521, lng: 103.8198 },
-      date: '2023-02-18'
+      date: "2025-04-20",
     },
     {
-      title: 'Mt. Ruapehu Ski Trip',
+      title: "Mt. Ruapehu Ski Trip",
       journal: "Skiing down the slopes of Mt. Ruapehu...",
-      files: ['DSCF6743.jpeg', 'DSCF6754.jpeg'],
+      files: ["DSCF6743.jpeg", "DSCF6754.jpeg"],
       voiceMemo: null,
-      country: 'New Zealand',
-      tag: 'travel',
+      country: "New Zealand",
+      tag: "travel",
       coordinate: { lat: -39.2812, lng: 175.6077 },
-      date: '2022-07-12'
+      date: "2013-07-15",
     },
     {
-      title: 'Buddhist Temple in Hong Kong',
+      title: "Buddhist Temple in Hong Kong",
       journal: "I visited the Po Lin Monastery...",
-      files: ['IMG_2498.jpeg', 'IMG_2558.jpeg'],
-      voiceMemo: 'market-bells.webm',
-      country: 'Hong Kong',
-      tag: 'adventure',
+      files: ["IMG_2498.jpeg", "IMG_2558.jpeg"],
+      voiceMemo: "market-bells.webm",
+      country: "Hong Kong",
+      tag: "adventure",
       coordinate: { lat: 22.3964, lng: 114.1095 },
-      date: '2023-05-29'
-    }
-  ]
+      date: "2016-08-29",
+    },
+  ],
 };
 
 export const diddyani_data = {
   profile: {
     age: 20,
-    username: 'mclovin',
-    hometown: 'New Dehli'
+    username: "mclovin",
+    hometown: "New Dehli",
   },
   memories: [
     {
-      title: 'Isla Pasion with the FAM',
+      title: "Isla Pasion with the FAM",
       journal: "Spent a sun-soaked day with family...",
-      files: ['arni1.jpg', 'arni2.jpg', 'arni3.jpg'],
-      voiceMemo: 'tower-ambience.webm',
-      country: 'Mexico',
-      tag: 'family',
-      coordinate: { lat: 21.1619, lng: -86.8515 }  // corrected to Cancun coordinates
+      files: ["arni1.jpg", "arni2.jpg", "arni3.jpg"],
+      voiceMemo: "tower-ambience.webm",
+      country: "Mexico",
+      tag: "family",
+      coordinate: { lat: 21.1619, lng: -86.8515 }, // corrected to Cancun coordinates
+      date: "2023-08-17",
     },
     {
-      title: 'Queens Town with Friends!',
+      title: "Queens Town with Friends!",
       journal: "Arrived in Queenstown, New Zealand...",
-      files: ['arni6.jpg', 'arni7.jpg', 'arni8.jpg'],
+      files: ["arni6.jpg", "arni7.jpg", "arni8.jpg"],
       voiceMemo: null,
-      country: 'New Zealand',
-      tag: 'adventure',
+      country: "New Zealand",
+      tag: "adventure",
       coordinate: { lat: -45.0312, lng: 168.6626 },
-      date: '2022-12-30'
+      date: "2022-12-30",
     },
     {
-      title: 'Professional Big Back in AMERICA',
+      title: "Professional Big Back in AMERICA",
       journal: "Embarked on a cross-country road trip...",
-      files: ['arni4.jpg', 'arni5.jpg'],
-      voiceMemo: 'vineyard-sounds.webm',
-      country: 'USA',
-      tag: 'road trip',
+      files: ["arni4.jpg", "arni5.jpg"],
+      voiceMemo: "vineyard-sounds.webm",
+      country: "USA",
+      tag: "road trip",
       coordinate: { lat: 39.8283, lng: -98.5795 },
-      date: '2023-08-14'
-    }
-  ]
+      date: "2023-08-14",
+    },
+  ],
 };
 
 export const tyou_data = {
   profile: {
     age: 20,
-    username: 'sesalover123',
-    hometown: 'GuangZhou'
+    username: "sesalover123",
+    hometown: "GuangZhou",
   },
   memories: [
     {
-      title: 'First Kiss',
+      title: "First Kiss",
       journal: "Under the neon lights of Gangnam district...",
-      files: ['Screenshot_20250306_081853_Instagram.jpg'],
-      voiceMemo: 'tower-ambience.webm',
-      country: 'South Korea',
-      tag: 'romance',
+      files: ["Screenshot_20250306_081853_Instagram.jpg"],
+      voiceMemo: "tower-ambience.webm",
+      country: "South Korea",
+      tag: "romance",
       coordinate: { lat: 37.4979, lng: 127.0276 },
-      date: '2023-02-14'
+      date: "2023-02-14",
     },
     {
-      title: 'Wet’n’Wild',
-      journal: "Rode the giant slides at Wet’n’Wild Gold Coast and surfed the waves at Surfers Paradise. Sunshine, salt water, and adrenaline made it one of my most thrilling days.",
-      files: ['IMG_20250109_234143_812.jpg'],
+      title: "Wet’n’Wild",
+      journal:
+        "Rode the giant slides at Wet’n’Wild Gold Coast and surfed the waves at Surfers Paradise. Sunshine, salt water, and adrenaline made it one of my most thrilling days.",
+      files: ["IMG_20250109_234143_812.jpg"],
       voiceMemo: null,
-      country: 'Australia',
-      tag: 'adventure',
-      coordinate: { lat: -28.0167, lng: 153.4000 },
-      date: '2023-01-09'
+      country: "Australia",
+      tag: "adventure",
+      coordinate: { lat: -28.0167, lng: 153.4 },
+      date: "2023-01-09",
     },
     {
-      title: 'First American Election',
+      title: "First American Election",
       journal: "Stood in line at a polling station...",
-      files: ['IMG_20250109_234143_840.jpg'],
-      voiceMemo: 'vineyard-sounds.webm',
-      country: 'USA',
-      tag: 'politics',
+      files: ["IMG_20250109_234143_840.jpg"],
+      voiceMemo: "vineyard-sounds.webm",
+      country: "USA",
+      tag: "politics",
       coordinate: { lat: 29.7604, lng: -95.3698 },
-      date: '2022-11-08'
-    }
-  ]
+      date: "2022-11-08",
+    },
+  ],
 };
 
 export const ibra_data = {
   profile: {
     age: 20,
-    username: 'ibrahimovic',
-    hometown: 'Moscow'
+    username: "ibrahimovic",
+    hometown: "Moscow",
   },
   memories: [
     {
-      title: 'Cafe Hopping',
-      journal: "I spent the afternoon exploring hidden coffee shops in Bangkok’s Thonglor district, sipping aromatic brews and sampling local pastries at each stop.",
-      files: ['ibra1.jpg'],
-      voiceMemo: 'tower-ambience.webm',
-      country: 'Thailand',
-      tag: 'food & drink',
+      title: "Cafe Hopping",
+      journal:
+        "I spent the afternoon exploring hidden coffee shops in Bangkok’s Thonglor district, sipping aromatic brews and sampling local pastries at each stop.",
+      files: ["ibra1.jpg"],
+      voiceMemo: "tower-ambience.webm",
+      country: "Thailand",
+      tag: "food & drink",
       coordinate: { lat: 13.7367, lng: 100.5684 },
-      date: '2023-04-05'
+      date: "2023-04-05",
     },
     {
-      title: '10m from Chaewon',
+      title: "10m from Chaewon",
       journal: "CHAEWON CHAEWON CHAEWON...",
-      files: ['ibra2.jpg'],
+      files: ["ibra2.jpg"],
       voiceMemo: null,
-      country: 'South Korea',
-      tag: 'culture, kpop, music',
-      coordinate: { lat: 37.5665, lng: 126.9780 },
-      date: '2023-07-22'
+      country: "South Korea",
+      tag: "culture, kpop, music",
+      coordinate: { lat: 37.5665, lng: 126.978 },
+      date: "2023-07-22",
     },
     {
-      title: 'Cherry Blossom Season',
+      title: "Cherry Blossom Season",
       journal: "Wandered through the cherry blossoms...",
-      files: ['ibra3.jpg'],
-      voiceMemo: 'vineyard-sounds.webm',
-      country: 'Japan',
-      tag: 'nature',
+      files: ["ibra3.jpg"],
+      voiceMemo: "vineyard-sounds.webm",
+      country: "Japan",
+      tag: "nature",
       coordinate: { lat: 34.6937, lng: 135.5023 },
-      date: '2023-03-28'
-    }
-  ]
+      date: "2023-03-28",
+    },
+  ],
 };
 
 export const oshan_data = {
   profile: {
     age: 20,
-    username: 'rocketleaguer55',
-    hometown: 'Auckland'
+    username: "rocketleaguer55",
+    hometown: "Auckland",
   },
   memories: [
     {
-      title: 'Beach Resort in Sri Lanka',
+      title: "Beach Resort in Sri Lanka",
       journal: "Relaxed on the golden sands of Mirissa Beach...",
-      files: ['oshan1.jpg', 'oshan2.jpg'],
-      voiceMemo: 'tower-ambience.webm',
-      country: 'Sri Lanka',
-      tag: 'relaxation',
-      coordinate: { lat: 5.9480, lng: 80.4515 },
-      date: '2023-05-17'
+      files: ["oshan1.jpg", "oshan2.jpg"],
+      voiceMemo: "tower-ambience.webm",
+      country: "Sri Lanka",
+      tag: "relaxation",
+      coordinate: { lat: 5.948, lng: 80.4515 },
+      date: "2015-07-04",
     },
-    
-  ]
+    {
+      title: "Tori Gates in Japan",
+      journal: " ",
+      files: ["oshan3.jpg"],
+      voiceMemo: "tower-ambience.webm",
+      country: "Japan",
+      tag: "",
+      coordinate: { lat: 5.948, lng: 80.4515 },
+      date: "2025-04-17",
+    },
+    {
+      title: "Paragliding in Rotarua",
+      journal: " ",
+      files: ["oshan4.jpg"],
+      voiceMemo: "",
+      country: "New Zealand",
+      tag: "relaxation",
+      coordinate: { lat: 5.948, lng: 80.4515 },
+      date: "2021-02-20",
+    },
+  ],
 };
