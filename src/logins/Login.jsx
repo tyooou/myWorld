@@ -12,6 +12,8 @@ export default function Login({ onLogin, onSwitchToSignUp }) {
 
       {/* Centered panel above the overlay */}
       <SystemPanel
+        title="Login"
+        onClick={"test"}
         style={{
           position: "fixed",
           top: "50%",
@@ -21,7 +23,6 @@ export default function Login({ onLogin, onSwitchToSignUp }) {
       >
         <div className="flex items-center justify-center">
           <div className="px-6 py-4">
-            <h2 className="text-lg font-bold mb-6 text-center">Log In</h2>
             <div className="space-y-4 text-[9px]">
               {[
                 { label: "Email", name: "email", type: "email" },
