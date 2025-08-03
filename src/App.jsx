@@ -10,101 +10,140 @@ import Profile from './components/Profile.jsx';
 
 
 
+
+
+
 const ProfileOverlay = ({ onClose }) => (
-  <Profile onClose={onClose}/>
+ <Profile onClose={onClose}/>
 );
+
+
+
+
 
 
 
 
 const FriendsOverlay = ({ onClose, changeMap }) => (
-  <FriendsList onClose={onClose} changeMap={changeMap} />
+ <FriendsList onClose={onClose} changeMap={changeMap} />
 );
 
+
 export default function App() {
-  // 1. All hooks must be unconditionally at top
-  const [view, setView] = useState('signup');                // 'signup' | 'login' | 'map'
-  const [userData, setUserData] = useState(jamals_data);
-  const [currentView, setCurrentView] = useState(null);      // for Profile/Friends overlays
-  const [currentUser, setCurrentUser] = useState(daves_data); // 'jamals' | 'daves' | 'diddyani'
-  const [perms,setPerms] = useState(true)
+ // 1. All hooks must be unconditionally at top
+ const [view, setView] = useState('signup');                // 'signup' | 'login' | 'map'
+ const [currentView, setCurrentView] = useState(null);      // for Profile/Friends overlays
+ const [currentUser, setCurrentUser] = useState(daves_data); // 'jamals' | 'daves' | 'diddyani'
+ const [perms,setPerms] = useState(true)
 
 
-  useEffect(() => {
-    const LS_KEY = 'myworld_users';
-    if (!localStorage.getItem(LS_KEY)) {
-      localStorage.setItem(
-        LS_KEY,
-        JSON.stringify({
-          jamals: jamals_data,
-          daves: daves_data,
-          diddyani: diddyani_data
-        })
-      );
-    }
+
+
+ useEffect(() => {
+  
+   localStorage.setItem("wander_joe", JSON.stringify({
+    jamals_data
+   }))
+
+
+   localStorage.setItem("diddyani_artsy", JSON.stringify({
+     diddyani_data
+   }))
+
+
+   localStorage.setItem("dave_explorer", JSON.stringify({
+     daves_data
+   }))
+
+
+  //  localStorage.setItem("oshan", JSON.stringify({
+  //    oshan: oshan_data,
+  //  }))
+  
   }, []);
 
-  // 2. Handlers to swap between views
-  const handleSignUp = () => setView('login');
-  const handleSwitchToLogin = () => setView('login');
-  const handleLogin = () => setView('map');
-  const handleSwitchToSignUp = () => setView('signup');
 
-  // 3. Early returns for 'signup' & 'login'
-  if (view === 'signup') {
-    return (
-      <SignUp
-        onSignUp={handleSignUp}
-        onSwitchToLogin={handleSwitchToLogin}
-      />
-    );
-  }
-  if (view === 'login') {
-    return (
-      <Login
-        onLogin={handleLogin}
-        onSwitchToSignUp={handleSwitchToSignUp}
-      />
-    );
-  }
+ // 2. Handlers to swap between views
+ const handleSignUp = () => setView('login');
+ const handleSwitchToLogin = () => setView('login');
+ const handleLogin = () => setView('map');
+ const handleSwitchToSignUp = () => setView('signup');
 
- const changeMap = (friend) => {
-   setCurrentUser(friend);
-   setPerms(false); // Set permission to false when changing map
+
+ // 3. Early returns for 'signup' & 'login'
+ if (view === 'signup') {
+   return (
+     <SignUp
+       onSignUp={handleSignUp}
+       onSwitchToLogin={handleSwitchToLogin}
+     />
+   );
+ }
+ if (view === 'login') {
+   return (
+     <Login
+       onLogin={handleLogin}
+       onSwitchToSignUp={handleSwitchToSignUp}
+     />
+   );
  }
 
 
- const onBack = () => {
-   setCurrentUser(daves_data); // Reset to default user
-   setPerms(true); // Reset permission to true
- };
+const changeMap = (friend) => {
+  setCurrentUser(friend);
+  setPerms(false); // Set permission to false when changing map
+}
 
 
-const renderOverlay = () => {
-  if (currentView === "profile") {
-    return <ProfileOverlay onClose={() => setCurrentView(null)} />;
-  }
-  if (currentView === "friends") {
-    return <FriendsOverlay onClose={() => setCurrentView(null)} changeMap={changeMap} />;
-  }
-  return null;
+
+
+const onBack = () => {
+  setCurrentUser(daves_data); // Reset to default user
+  setPerms(true); // Reset permission to true
 };
 
 
 
 
+const renderOverlay = () => {
+ if (currentView === "profile") {
+   return <ProfileOverlay onClose={() => setCurrentView(null)} />;
+ }
+ if (currentView === "friends") {
+   return <FriendsOverlay onClose={() => setCurrentView(null)} changeMap={changeMap} />;
+ }
+ return null;
+};
+
+
+
+
+
+
+
+
 return (
-  <>
-      <Header
-      onShowProfile={() => setCurrentView("profile")}
-      onShowFriends={() => setCurrentView("friends")}
-    />
-    {renderOverlay()}
-     <MemoryMap name={currentUser} permission={perms} onBack={onBack}/>
-     <Footer />
-  </>
+ <>
+     <Header
+     onShowProfile={() => setCurrentView("profile")}
+     onShowFriends={() => setCurrentView("friends")}
+   />
+   {renderOverlay()}
+    <MemoryMap name={currentUser} permission={perms} onBack={onBack}/>
+    <Footer />
+ </>
 );
 }
+
+
+
+
+
+
+
+
+
+
 
 
 
