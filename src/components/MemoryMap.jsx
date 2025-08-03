@@ -5,6 +5,9 @@ import "./MemoryMap.css";
 import NewMemoryForm from "./memory/NewMemoryForm.jsx";
 import SystemButton from "./system/SystemButton.jsx";
 import Timeline from "./Timeline/Timeline.jsx"; // Make sure to import the Timeline component
+import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
+import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
+
 
 import { jamals_data, daves_data, diddyani_data } from "../Data/UserData.js";
 
@@ -446,6 +449,27 @@ mapboxgl.accessToken = "pk.eyJ1IjoiZWJvcndlZWQiLCJhIjoiY21kdG1mcjNkMHBneTJsb24zZ
 
       rafRef.current = requestAnimationFrame(pixelateMap);
     });
+    // Add geocoder
+    const geocoder = new MapboxGeocoder({
+      accessToken: mapboxgl.accessToken,
+      mapboxgl: mapboxgl,
+      marker: false,
+      placeholder: "Search places",
+      flyTo: {
+        bearing: 0,
+        speed: 1,
+        curve: 1,
+        zoom: 11,
+        easing: (t) => t
+      }
+    });
+    const geocoderContainer = document.getElementById('geocoder-container');
+    if (geocoderContainer) {
+      geocoderContainer.innerHTML = ''; // Clear any previous geocoder
+      geocoderContainer.appendChild(geocoder.onAdd(mapInstance.current));
+    }
+    
+
 
     return () => {
       cancelAnimationFrame(rafRef.current);
@@ -462,6 +486,11 @@ return (
         onClick={toggleTimeline}
       />
     </div>
+    <div
+    id="geocoder-container"
+    className="absolute top-12 left-2 z-[1000] w-[250px]"
+    ></div>
+
 
     {/* Back Button */}
     {!permission && (

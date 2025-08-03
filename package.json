@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@hackernoon/pixel-icon-library": "^1.0.6",
+    "@mapbox/mapbox-gl-geocoder": "^5.1.0",
     "@maptiler/sdk": "^3.7.0",
     "@tailwindcss/vite": "^4.1.11",
     "ditherjs": "^0.10.0",
