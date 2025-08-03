@@ -8,11 +8,21 @@ import Footer from "./components/Footer.jsx";
 import FriendsList from "./components/FriendsList.jsx";
 import Profile from "./components/Profile.jsx";
 
-const ProfileOverlay = ({ onClose }) => <Profile onClose={onClose} />;
+const ProfileOverlay = ({ onClose }) => (
+ <Profile onClose={onClose}/>
+);
+
+
+
+
+
+
+
 
 const FriendsOverlay = ({ onClose, changeMap }) => (
-  <FriendsList onClose={onClose} changeMap={changeMap} />
+ <FriendsList onClose={onClose} changeMap={changeMap} />
 );
+
 
 export default function App() {
   // 1. All hooks must be unconditionally at top
@@ -22,18 +32,27 @@ export default function App() {
   const [currentUser, setCurrentUser] = useState(daves_data); // 'jamals' | 'daves' | 'diddyani'
   const [perms, setPerms] = useState(true);
 
-  useEffect(() => {
-    const LS_KEY = "myworld_users";
-    if (!localStorage.getItem(LS_KEY)) {
-      localStorage.setItem(
-        LS_KEY,
-        JSON.stringify({
-          jamals: jamals_data,
-          daves: daves_data,
-          diddyani: diddyani_data,
-        })
-      );
-    }
+ useEffect(() => {
+  
+   localStorage.setItem("wander_joe", JSON.stringify({
+    jamals_data
+   }))
+
+
+   localStorage.setItem("diddyani_artsy", JSON.stringify({
+     diddyani_data
+   }))
+
+
+   localStorage.setItem("dave_explorer", JSON.stringify({
+     daves_data
+   }))
+
+
+  //  localStorage.setItem("oshan", JSON.stringify({
+  //    oshan: oshan_data,
+  //  }))
+  
   }, []);
 
   // 2. Handlers to swap between views
@@ -44,15 +63,19 @@ export default function App() {
 
   // 3. Early returns for 'signup' & 'login'
 
-  const changeMap = (friend) => {
-    setCurrentUser(friend);
-    setPerms(false); // Set permission to false when changing map
-  };
 
-  const onBack = () => {
-    setCurrentUser(daves_data); // Reset to default user
-    setPerms(true); // Reset permission to true
-  };
+const changeMap = (friend) => {
+  setCurrentUser(friend);
+  setPerms(false); // Set permission to false when changing map
+}
+
+
+
+
+const onBack = () => {
+  setCurrentUser(daves_data); // Reset to default user
+  setPerms(true); // Reset permission to true
+};
 
   const renderOverlay = () => {
     if (currentView === "profile") {
@@ -86,3 +109,20 @@ export default function App() {
     </>
   );
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

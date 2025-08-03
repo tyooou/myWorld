@@ -5,6 +5,8 @@ import "./MemoryMap.css";
 import NewMemoryForm from "./memory/NewMemoryForm.jsx";
 import SystemButton from "./system/SystemButton.jsx";
 
+import { jamals_data, daves_data, diddyani_data } from "../Data/UserData.js";
+
 mapboxgl.accessToken =
   "pk.eyJ1IjoiZWJvcndlZWQiLCJhIjoiY21kdG1mcjNkMHBneTJsb24zZzdsZHQycyJ9.B6OMNYu8tzRTiYXh5xLOpQ";
 
@@ -13,14 +15,60 @@ export default function MemoryMap({ name, permission, onBack }) {
   const pixelCanvasRef = useRef(null);
   const mapInstance = useRef(null);
   const rafRef = useRef(null);
-  const [memories, setMemories] = useState(name?.memories || []);
+
+  const username = name.profile.username;
+
+  console.log('Current username:', username);
+
+  // Helper function to get user data structure
+  const getUserDataStructure = () => {
+    const storageKey = `userData_${username}`;
+    try {
+      const stored = localStorage.getItem(storageKey);
+      if (stored) {
+        return JSON.parse(stored);
+      }
+    } catch (err) {
+      console.error("Error parsing localStorage for", username, err);
+    }
+    
+    // Return default structure if nothing exists
+    return {
+      profile: name.profile,
+      memories: []
+    };
+  };
+
+  // Helper function to save user data
+  const saveUserData = (userData) => {
+    const storageKey = `userData_${username}`;
+    try {
+      localStorage.setItem(storageKey, JSON.stringify(userData));
+      console.log('Saved to localStorage:', storageKey, userData);
+    } catch (err) {
+      console.error("Error saving to localStorage:", err);
+    }
+  };
+
+  // Initialize memories from localStorage
+  const [memories, setMemories] = useState(() => {
+    const userData = getUserDataStructure();
+    console.log('Initial memories loaded:', userData.memories);
+    return userData.memories || [];
+  });
+
   const [isSwitchingUser, setIsSwitchingUser] = useState(false);
 
+  // Update memories when user changes
   useEffect(() => {
+    console.log('User changed, loading memories for:', username);
     setIsSwitchingUser(true);
-    setMemories(name?.memories || []);
-    setTimeout(() => setIsSwitchingUser(false), 300); // Small delay to show transition
-  }, [name]);
+    
+    const userData = getUserDataStructure();
+    setMemories(userData.memories || []);
+    
+    setTimeout(() => setIsSwitchingUser(false), 300);
+  }, [username]); // Changed from [name] to [username] for more specific dependency
 
   useEffect(() => {
     if (!mapInstance.current) return;
@@ -177,8 +225,9 @@ export default function MemoryMap({ name, permission, onBack }) {
       alert("Please enter a title");
       return;
     }
-
+  
     const memoryToAdd = {
+      id: Date.now(), // Add unique ID for better tracking
       title: newMemory.title,
       journal: newMemory.journal,
       files: newMemory.files,
@@ -186,12 +235,28 @@ export default function MemoryMap({ name, permission, onBack }) {
       country: newMemory.country,
       tag: newMemory.tag,
       coordinate: newMemory.coordinate,
+      createdAt: new Date().toISOString() // Add timestamp
     };
-
-    setMemories([...memories, memoryToAdd]);
-    //use local storage here to store it
+  
+    const updatedMemories = [...memories, memoryToAdd];
+    
+    // Update state
+    setMemories(updatedMemories);
+  
+    // Get current user data and update it
+    const currentUserData = getUserDataStructure();
+    const updatedUserData = {
+      ...currentUserData,
+      memories: updatedMemories
+    };
+  
+    // Save to localStorage
+    saveUserData(updatedUserData);
+  
+    console.log("New memory saved for user:", username);
+    console.log("Updated memories:", updatedMemories);
+  
     setShowForm(false);
-
     if (tempMarkerRef.current) {
       tempMarkerRef.current.remove();
       tempMarkerRef.current = null;
@@ -366,7 +431,7 @@ export default function MemoryMap({ name, permission, onBack }) {
         mapInstance.current = null;
       }
     };
-  }, [permission, name]);
+  }, [permission, username]); // Changed dependency from name to username
 
   useEffect(() => {
     if (mapInstance.current && mapInstance.current.isStyleLoaded()) {
