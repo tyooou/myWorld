@@ -114,7 +114,7 @@ export default function Timeline({ memories, onClose, onMemoryClick, selectedMem
       {/* Close button */}
       <button 
         onClick={onClose}
-        className="absolute top-2 right-2 p-1 text-gray-500 hover:text-gray-700"
+        className="absolute bottom-72.5 right-4 p-1 text-gray-500 hover:text-gray-700 scale-250"
       >
         ×
       </button>

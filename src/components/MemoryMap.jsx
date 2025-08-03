@@ -374,6 +374,7 @@ mapboxgl.accessToken = "pk.eyJ1IjoiZWJvcndlZWQiLCJhIjoiY21kdG1mcjNkMHBneTJsb24zZ
       center: previousViewRef.current.center,
       zoom: previousViewRef.current.zoom,
       projection: projectionStyle,
+      renderWorldCopies:false,
       antialias: true,
     });
 
