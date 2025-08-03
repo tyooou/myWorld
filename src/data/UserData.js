@@ -96,7 +96,7 @@ export const diddyani_data = {
       voiceMemo: 'tower-ambience.webm',
       country: 'Mexico',
       tag: 'family',
-      coordinate: { lat: 21.2329, lng: -86.7165 }
+      coordinate: { lat: 21.1619, lng: -86.8515 }  // corrected to Cancun coordinates
     },
     {
       title: 'Queens Town with Friends!',
@@ -136,8 +136,8 @@ export const tyou_data = {
       coordinate: { lat: 37.4979, lng: 127.0276 }
     },
     {
-      title: 'Wet’n’Wild',
-      journal: "Rode the giant slides at Wet’n’Wild Gold Coast and surfed the waves at Surfers Paradise. Sunshine, salt water, and adrenaline made it one of my most thrilling days.",
+      title: 'Wet n Wild',
+      journal: "Rode the giant slides at Wet n Wild Gold Coast and surfed the waves at Surfers Paradise. Sunshine, salt water, and adrenaline made it one of my most thrilling days.",
       files: ['IMG_20250109_234143_812.jpg'],
       voiceMemo: null,
       country: 'Australia',
@@ -165,7 +165,7 @@ export const ibra_data = {
   memories: [
     {
       title: 'Cafe Hopping',
-      journal: "I spent the afternoon exploring hidden coffee shops in Bangkok’s Thonglor district, sipping aromatic brews and sampling local pastries at each stop.",
+      journal: "I spent the afternoon exploring hidden coffee shops in Bangkoks Thonglor district, sipping aromatic brews and sampling local pastries at each stop.",
       files: ['ibra1.jpg'],
       voiceMemo: 'tower-ambience.webm',
       country: 'Thailand',

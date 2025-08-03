@@ -12,11 +12,11 @@ export default function FriendsList({ onClose, changeMap }) {
 
   // simple username → marker color map
   const userColorMap = {
-    wander_joe: "#E74C3C",
-    dave_explorer: "#2ECC71",
-    mclovin: "#3498DB",
-    sesalover123: "#F1C40F",
-    ibrahimovic: "#9B59B6"
+    wander_joe: "#E74C3C",    // Jamal – red
+    dave_explorer: "#FF69B4", // Dave – pink
+    mclovin: "#3498DB",       // Diddyani – blue
+    sesalover123: "#F1C40F",  // Tyou – yellow
+    ibrahimovic: "#9B59B6"    // Ibra – purple
   };
 
   // 1. Define regions and collect all memories in those countries,
