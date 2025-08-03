@@ -1,2 +1,17 @@
 
 @import "tailwindcss";
+/* Hide the specific footer div while preserving its layout */
+div.w-full.h-6.relative.flex.items-center.justify-between.px-1.text-\[9px\].font-\[pixel\].bg-gray-200.border-t-\[1px\].border-t-white.border-l-\[1px\].border-l-white.border-b-\[1px\].border-b-gray-500.border-r-\[1px\].border-r-gray-500 {
+  visibility: hidden;
+  height: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+  border-width: 0;
+  overflow: hidden;
+}
+
+/* Hide both the container and footer divs */
+div.absolute.bottom-0.left-0.w-full.z-10.bg-gray-300.p-\[0\.125rem\],
+div.absolute.bottom-0.left-0.w-full.z-10.bg-gray-300.p-\[0\.125rem\] > div {
+  display: none;
+}
