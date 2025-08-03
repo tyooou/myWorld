@@ -343,6 +343,7 @@ useEffect(() => {
           .togglePopup();
 
         setFormPosition({ lat, lng });
+        setShowPinDetail(false);
         setShowForm(true);
         setNewMemory({
           title: "",
