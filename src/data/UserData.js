@@ -208,24 +208,6 @@ export const oshan_data = {
       country: 'Sri Lanka',
       tag: 'relaxation',
       coordinate: { lat: 5.9480, lng: 80.4515 }
-    },
-    {
-      title: '',
-      journal: '',
-      files: [''],
-      voiceMemo: null,
-      country: '',
-      tag: '',
-      coordinate: {}
-    },
-    {
-      title: '',
-      journal: '',
-      files: [''],
-      voiceMemo: null,
-      country: '',
-      tag: '',
-      coordinate: {}
     }
   ]
 };

@@ -59,16 +59,21 @@ export default function MemoryMap({ name, permission, onBack }) {
 
   const [isSwitchingUser, setIsSwitchingUser] = useState(false);
 
-  // Update memories when user changes
-  useEffect(() => {
-    console.log('User changed, loading memories for:', username);
-    setIsSwitchingUser(true);
-    
-    const userData = getUserDataStructure();
-    setMemories(userData.memories || []);
-    
-    setTimeout(() => setIsSwitchingUser(false), 300);
-  }, [username]); // Changed from [name] to [username] for more specific dependency
+  // assign each username a unique color
+  const userColorMap = {
+    wander_joe: "#E74C3C",
+    dave_explorer: "#2ECC71",
+    mclovin: "#3498DB",
+    sesalover123: "#F1C40F",
+    ibrahimovic: "#9B59B6",
+    rocketleaguer55: "#1ABC9C"
+  };
+
+useEffect(() => {
+  setIsSwitchingUser(true);
+  setMemories(name?.memories || []);
+  setTimeout(() => setIsSwitchingUser(false), 300); // Small delay to show transition
+}, [name]);
 
   useEffect(() => {
     if (!mapInstance.current) return;
@@ -139,11 +144,14 @@ export default function MemoryMap({ name, permission, onBack }) {
     markerObjs.current = [];
 
     // Add new ones
-    memories.forEach((mem) => {
-      const {
-        coordinate: { lng, lat },
-      } = mem;
-      const marker = new mapboxgl.Marker()
+    memories.forEach(mem => {
+      const { coordinate: { lng, lat } } = mem;
+      // determine which user this memory belongs to
+      const who = mem.friend || name.profile.username;
+      const color = userColorMap[who] || "#000000";
+
+      // create a colored marker
+      const marker = new mapboxgl.Marker({ color })
         .setLngLat([lng, lat])
         .addTo(mapInstance.current);
 

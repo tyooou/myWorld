@@ -28,31 +28,23 @@ export default function App() {
   // 1. All hooks must be unconditionally at top
   const [view, setView] = useState("login"); // 'signup' | 'login' | 'map'
   const [userData, setUserData] = useState(jamals_data);
-  const [currentView, setCurrentView] = useState(null); // for Profile/Friends overlays
+  const [currentView, setCurrentView] = useState(null);      // for Profile/Friends overlays
   const [currentUser, setCurrentUser] = useState(daves_data); // 'jamals' | 'daves' | 'diddyani'
-  const [perms, setPerms] = useState(true);
-
- useEffect(() => {
-  
-   localStorage.setItem("wander_joe", JSON.stringify({
-    jamals_data
-   }))
+  const [perms,setPerms] = useState(true)
 
 
-   localStorage.setItem("diddyani_artsy", JSON.stringify({
-     diddyani_data
-   }))
-
-
-   localStorage.setItem("dave_explorer", JSON.stringify({
-     daves_data
-   }))
-
-
-  //  localStorage.setItem("oshan", JSON.stringify({
-  //    oshan: oshan_data,
-  //  }))
-  
+  useEffect(() => {
+    const LS_KEY = 'myworld_users';
+    if (!localStorage.getItem(LS_KEY)) {
+      localStorage.setItem(
+        LS_KEY,
+        JSON.stringify({
+          jamals: jamals_data,
+          daves: daves_data,
+          diddyani: diddyani_data
+        })
+      );
+    }
   }, []);
 
   // 2. Handlers to swap between views
