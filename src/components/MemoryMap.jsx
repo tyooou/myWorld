@@ -25,6 +25,7 @@ export default function MemoryMap({ name, permission, onBack }) {
   const [newMemory, setNewMemory] = useState({
     title: '',
     journal: '',
+    journal: '',
     files: [],
     voiceMemo: null,
     country: '',
@@ -84,7 +85,7 @@ export default function MemoryMap({ name, permission, onBack }) {
       if (isVisibleOnGlobe(center, { lat, lng })) {
         marker.getElement().style.display = '';
       } else {
-        marker.getElement().style.display = 'none';
+        marker.getElement().style.display = "none";
       }
     });
   };
@@ -95,11 +96,13 @@ export default function MemoryMap({ name, permission, onBack }) {
     // Clear existing markers
     markerObjs.current.forEach(({ marker }) => marker.remove());
     markerObjs.current = [];
-
-    // Add new markers
+  
+    // Add new ones
     memories.forEach(mem => {
       const { coordinate: { lng, lat } } = mem;
+
       const marker = new mapboxgl.Marker()
+        .setLngLat([lng, lat])
         .setLngLat([lng, lat])
         .addTo(mapInstance.current);
       
@@ -110,9 +113,11 @@ export default function MemoryMap({ name, permission, onBack }) {
 
       markerObjs.current.push({ mem, marker });
     });
-
+  
     updateMarkerVisibility();
   };
+  
+
 
   const handleMemoryClick = (memory) => {
     setSelectedMemoryId(memory.id);
@@ -213,7 +218,7 @@ export default function MemoryMap({ name, permission, onBack }) {
     mapInstance.current?.flyTo({
       center: previousViewRef.current.center,
       zoom: previousViewRef.current.zoom,
-      essential: true
+      essential: true,
     });
   };
 
@@ -267,7 +272,7 @@ export default function MemoryMap({ name, permission, onBack }) {
   useEffect(() => {
     mapInstance.current = new mapboxgl.Map({
       container: mapContainer.current,
-      style: 'mapbox://styles/eborweed/cmdtnwc8b007x01srgmfwar2m',
+      style: "mapbox://styles/eborweed/cmdtnwc8b007x01srgmfwar2m",
       center: previousViewRef.current.center,
       zoom: previousViewRef.current.zoom,
       projection: projectionStyle,
@@ -293,7 +298,7 @@ export default function MemoryMap({ name, permission, onBack }) {
         const { lng, lat } = e.lngLat;
         previousViewRef.current = {
           center: mapInstance.current.getCenter(),
-          zoom: mapInstance.current.getZoom()
+          zoom: mapInstance.current.getZoom(),
         };
         
         tempMarkerRef.current?.remove();
@@ -301,27 +306,32 @@ export default function MemoryMap({ name, permission, onBack }) {
         mapInstance.current.flyTo({
           center: [lng, lat],
           zoom: 11,
+          zoom: 11,
           essential: true
         });
         
         const el = document.createElement('div');
         el.className = 'Marker';
+        el.className = 'Marker';
         el.style.backgroundImage = 'url(https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-blue.png)';
         el.style.width = '25px';
         el.style.height = '41px';
         el.style.backgroundSize = 'contain';
-        
+
         tempMarkerRef.current = new mapboxgl.Marker(el)
           .setLngLat([lng, lat])
-          .setPopup(new mapboxgl.Popup().setHTML("New memory location (unsaved)"))
+          .setPopup(
+            new mapboxgl.Popup().setHTML("New memory location (unsaved)")
+          )
           .addTo(mapInstance.current)
           .togglePopup();
-        
+
         setFormPosition({ lat, lng });
         setShowForm(true);
         setSelectedMemoryId(null);
         setNewMemory({
           title: '',
+          journal: '',
           journal: '',
           files: [],
           voiceMemo: null,
@@ -377,6 +387,8 @@ export default function MemoryMap({ name, permission, onBack }) {
         ref={pixelCanvasRef}
         className="pixel-canvas"
       />
+
+      {/* Main map container */}
 
       {/* Main map container */}
       <div
