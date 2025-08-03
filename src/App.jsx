@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { jamals_data, daves_data, diddyani_data } from "./Data/UserData.js";
+import { jamals_data, daves_data, diddyani_data, tyou_data, ibra_data, oshan_data } from "./Data/UserData.js";
 import SignUp from "./logins/SignUp.jsx";
 import Login from "./logins/Login.jsx";
 import Header from "./components/Header.jsx";
@@ -29,7 +29,7 @@ export default function App() {
   const [view, setView] = useState("login"); // 'signup' | 'login' | 'map'
   const [userData, setUserData] = useState(jamals_data);
   const [currentView, setCurrentView] = useState(null);      // for Profile/Friends overlays
-  const [currentUser, setCurrentUser] = useState(daves_data); // 'jamals' | 'daves' | 'diddyani'
+  const [currentUser, setCurrentUser] = useState(oshan_data); // 'jamals' | 'daves' | 'diddyani'
   const [perms,setPerms] = useState(true)
 
 
@@ -41,7 +41,10 @@ export default function App() {
         JSON.stringify({
           jamals: jamals_data,
           daves: daves_data,
-          diddyani: diddyani_data
+          diddyani: diddyani_data,
+          oshan: oshan_data,
+          tyou: tyou_data,
+          ibra: ibra_data
         })
       );
     }
