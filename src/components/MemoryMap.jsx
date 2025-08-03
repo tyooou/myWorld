@@ -11,9 +11,10 @@ import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
 
 import { jamals_data, daves_data, diddyani_data } from "../Data/UserData.js";
 
-mapboxgl.accessToken = "pk.eyJ1IjoiZWJvcndlZWQiLCJhIjoiY21kdG1mcjNkMHBneTJsb24zZzdsZHQycyJ9.B6OMNYu8tzRTiYXh5xLOpQ";
+mapboxgl.accessToken =
+  "pk.eyJ1IjoiZWJvcndlZWQiLCJhIjoiY21kdG1mcjNkMHBneTJsb24zZzdsZHQycyJ9.B6OMNYu8tzRTiYXh5xLOpQ";
 
- function MemoryMap({ name, permission, onBack }) {
+function MemoryMap({ name, permission, onBack }) {
   // Refs
   const mapContainer = useRef(null);
   const pixelCanvasRef = useRef(null);
@@ -23,11 +24,11 @@ mapboxgl.accessToken = "pk.eyJ1IjoiZWJvcndlZWQiLCJhIjoiY21kdG1mcjNkMHBneTJsb24zZ
   // Timeline-related state
   const [showTimeline, setShowTimeline] = useState(false);
   const [selectedMemoryId, setSelectedMemoryId] = useState(null);
-  const [projectionStyle, setProjectionStyle] = useState('globe');
+  const [projectionStyle, setProjectionStyle] = useState("globe");
 
   const username = name.profile.username;
 
-  console.log('Current username:', username);
+  console.log("Current username:", username);
 
   // Helper function to get user data structure
   const getUserDataStructure = () => {
@@ -40,11 +41,11 @@ mapboxgl.accessToken = "pk.eyJ1IjoiZWJvcndlZWQiLCJhIjoiY21kdG1mcjNkMHBneTJsb24zZ
     } catch (err) {
       console.error("Error parsing localStorage for", username, err);
     }
-    
+
     // Return default structure if nothing exists
     return {
       profile: name.profile,
-      memories: []
+      memories: [],
     };
   };
 
@@ -53,7 +54,7 @@ mapboxgl.accessToken = "pk.eyJ1IjoiZWJvcndlZWQiLCJhIjoiY21kdG1mcjNkMHBneTJsb24zZ
     const storageKey = `userData_${username}`;
     try {
       localStorage.setItem(storageKey, JSON.stringify(userData));
-      console.log('Saved to localStorage:', storageKey, userData);
+      console.log("Saved to localStorage:", storageKey, userData);
     } catch (err) {
       console.error("Error saving to localStorage:", err);
     }
@@ -62,7 +63,7 @@ mapboxgl.accessToken = "pk.eyJ1IjoiZWJvcndlZWQiLCJhIjoiY21kdG1mcjNkMHBneTJsb24zZ
   // Initialize memories from localStorage
   const [memories, setMemories] = useState(() => {
     const userData = getUserDataStructure();
-    console.log('Initial memories loaded:', userData.memories);
+    console.log("Initial memories loaded:", userData.memories);
     return userData.memories || [];
   });
 
@@ -75,7 +76,7 @@ mapboxgl.accessToken = "pk.eyJ1IjoiZWJvcndlZWQiLCJhIjoiY21kdG1mcjNkMHBneTJsb24zZ
     mclovin: "#3498DB",
     sesalover123: "#F1C40F",
     ibrahimovic: "#9B59B6",
-    rocketleaguer55: "#1ABC9C"
+    rocketleaguer55: "#1ABC9C",
   };
 
   useEffect(() => {
@@ -109,7 +110,7 @@ mapboxgl.accessToken = "pk.eyJ1IjoiZWJvcndlZWQiLCJhIjoiY21kdG1mcjNkMHBneTJsb24zZ
     country: "",
     tag: "",
     coordinate: { lat: null, lng: null },
-    date: new Date().toISOString().split('T')[0] // Added date field
+    date: new Date().toISOString().split("T")[0], // Added date field
   });
   const previousViewRef = useRef({ center: [0, 20], zoom: 4 });
   const markerObjs = useRef([]);
@@ -124,22 +125,22 @@ mapboxgl.accessToken = "pk.eyJ1IjoiZWJvcndlZWQiLCJhIjoiY21kdG1mcjNkMHBneTJsb24zZ
   // Handle memory click from timeline
   const handleMemoryClick = (memory) => {
     setSelectedMemoryId(memory.id);
-    setNewMemory({ 
+    setNewMemory({
       ...memory,
-      id: memory.id
+      id: memory.id,
     });
     setFormPosition({
       lat: memory.coordinate.lat,
-      lng: memory.coordinate.lng
+      lng: memory.coordinate.lng,
     });
     setShowForm(true);
-    
+
     // Fly to the memory location
     if (mapInstance.current) {
       mapInstance.current.flyTo({
         center: [memory.coordinate.lng, memory.coordinate.lat],
         zoom: 11,
-        essential: true
+        essential: true,
       });
     }
   };
@@ -160,7 +161,7 @@ mapboxgl.accessToken = "pk.eyJ1IjoiZWJvcndlZWQiLCJhIjoiY21kdG1mcjNkMHBneTJsb24zZ
   };
 
   const updateMarkerVisibility = () => {
-    if (!mapInstance.current || projectionStyle !== 'globe') return;
+    if (!mapInstance.current || projectionStyle !== "globe") return;
     const center = mapInstance.current.getCenter();
     markerObjs.current.forEach(({ mem, marker }) => {
       const {
@@ -182,8 +183,10 @@ mapboxgl.accessToken = "pk.eyJ1IjoiZWJvcndlZWQiLCJhIjoiY21kdG1mcjNkMHBneTJsb24zZ
     markerObjs.current = [];
 
     // Add new ones
-    memories.forEach(mem => {
-      const { coordinate: { lng, lat } } = mem;
+    memories.forEach((mem) => {
+      const {
+        coordinate: { lng, lat },
+      } = mem;
       // determine which user this memory belongs to
       const who = mem.friend || name.profile.username;
       const color = userColorMap[who] || "#000000";
@@ -243,16 +246,16 @@ mapboxgl.accessToken = "pk.eyJ1IjoiZWJvcndlZWQiLCJhIjoiY21kdG1mcjNkMHBneTJsb24zZ
 
   const handleFileChange = (e) => {
     const newFiles = Array.from(e.target.files);
-    setNewMemory(prev => ({
+    setNewMemory((prev) => ({
       ...prev,
-      files: [...prev.files, ...newFiles]
+      files: [...prev.files, ...newFiles],
     }));
   };
 
   const handleVoiceMemo = (blob) => {
-    setNewMemory(prev => ({
+    setNewMemory((prev) => ({
       ...prev,
-      voiceMemo: blob
+      voiceMemo: blob,
     }));
   };
 
@@ -261,46 +264,49 @@ mapboxgl.accessToken = "pk.eyJ1IjoiZWJvcndlZWQiLCJhIjoiY21kdG1mcjNkMHBneTJsb24zZ
       alert("Please enter a title");
       return;
     }
-  
+
     const memoryToSave = {
       ...newMemory,
       coordinate: {
         lat: formPosition.lat,
-        lng: formPosition.lng
-      }
+        lng: formPosition.lng,
+      },
     };
-  
+
     let updatedMemories;
     if (selectedMemoryId) {
       // Update existing memory
-      updatedMemories = memories.map(mem => 
+      updatedMemories = memories.map((mem) =>
         mem.id === selectedMemoryId ? memoryToSave : mem
       );
     } else {
       // Add new memory
-      updatedMemories = [...memories, { 
-        ...memoryToSave, 
-        id: Date.now(),
-        createdAt: new Date().toISOString()
-      }];
+      updatedMemories = [
+        ...memories,
+        {
+          ...memoryToSave,
+          id: Date.now(),
+          createdAt: new Date().toISOString(),
+        },
+      ];
     }
-    
+
     // Update state
     setMemories(updatedMemories);
-  
+
     // Get current user data and update it
     const currentUserData = getUserDataStructure();
     const updatedUserData = {
       ...currentUserData,
-      memories: updatedMemories
+      memories: updatedMemories,
     };
-  
+
     // Save to localStorage
     saveUserData(updatedUserData);
-  
+
     console.log("Memory saved for user:", username);
     console.log("Updated memories:", updatedMemories);
-  
+
     setShowForm(false);
     if (tempMarkerRef.current) {
       tempMarkerRef.current.remove();
@@ -322,9 +328,11 @@ mapboxgl.accessToken = "pk.eyJ1IjoiZWJvcndlZWQiLCJhIjoiY21kdG1mcjNkMHBneTJsb24zZ
   };
 
   const toggleProjection = () => {
-    setProjectionStyle(prev => prev === 'globe' ? 'mercator' : 'globe');
+    setProjectionStyle((prev) => (prev === "globe" ? "mercator" : "globe"));
     if (mapInstance.current) {
-      mapInstance.current.setProjection(projectionStyle === 'globe' ? 'mercator' : 'globe');
+      mapInstance.current.setProjection(
+        projectionStyle === "globe" ? "mercator" : "globe"
+      );
     }
   };
 
@@ -333,40 +341,63 @@ mapboxgl.accessToken = "pk.eyJ1IjoiZWJvcndlZWQiLCJhIjoiY21kdG1mcjNkMHBneTJsb24zZ
       rafRef.current = requestAnimationFrame(pixelateMap);
       return;
     }
-    
+
     const mapCanvas = mapInstance.current.getCanvas();
     const pixelCanvas = pixelCanvasRef.current;
     const currentZoom = mapInstance.current.getZoom();
-    
+
     const minScale = 0.1;
     const maxScale = 1;
     const zoomMin = 1;
     const zoomMax = 20;
-    
+
     let t = (currentZoom - zoomMin) / (zoomMax - zoomMin);
     t = Math.max(0, Math.min(1, t));
     const scale = minScale + t * (maxScale - minScale);
 
-    if (pixelCanvas.width !== mapCanvas.width || pixelCanvas.height !== mapCanvas.height) {
+    if (
+      pixelCanvas.width !== mapCanvas.width ||
+      pixelCanvas.height !== mapCanvas.height
+    ) {
       pixelCanvas.width = mapCanvas.width;
       pixelCanvas.height = mapCanvas.height;
     }
-    
-    const ctx = pixelCanvas.getContext('2d');
+
+    const ctx = pixelCanvas.getContext("2d");
     const sw = Math.max(1, Math.floor(mapCanvas.width * scale));
     const sh = Math.max(1, Math.floor(mapCanvas.height * scale));
-    
-    const tmpCanvas = document.createElement('canvas');
+
+    const tmpCanvas = document.createElement("canvas");
     tmpCanvas.width = sw;
     tmpCanvas.height = sh;
-    const tmpCtx = tmpCanvas.getContext('2d');
-    
-    tmpCtx.drawImage(mapCanvas, 0, 0, mapCanvas.width, mapCanvas.height, 0, 0, sw, sh);
-    
+    const tmpCtx = tmpCanvas.getContext("2d");
+
+    tmpCtx.drawImage(
+      mapCanvas,
+      0,
+      0,
+      mapCanvas.width,
+      mapCanvas.height,
+      0,
+      0,
+      sw,
+      sh
+    );
+
     ctx.imageSmoothingEnabled = false;
     ctx.clearRect(0, 0, pixelCanvas.width, pixelCanvas.height);
-    ctx.drawImage(tmpCanvas, 0, 0, sw, sh, 0, 0, pixelCanvas.width, pixelCanvas.height);
-    
+    ctx.drawImage(
+      tmpCanvas,
+      0,
+      0,
+      sw,
+      sh,
+      0,
+      0,
+      pixelCanvas.width,
+      pixelCanvas.height
+    );
+
     rafRef.current = requestAnimationFrame(pixelateMap);
   };
 
@@ -437,7 +468,7 @@ mapboxgl.accessToken = "pk.eyJ1IjoiZWJvcndlZWQiLCJhIjoiY21kdG1mcjNkMHBneTJsb24zZ
           country: "",
           tag: "",
           coordinate: { lat, lng },
-          date: new Date().toISOString().split('T')[0]
+          date: new Date().toISOString().split("T")[0],
         });
       });
 
@@ -477,136 +508,123 @@ mapboxgl.accessToken = "pk.eyJ1IjoiZWJvcndlZWQiLCJhIjoiY21kdG1mcjNkMHBneTJsb24zZ
     };
   }, [permission, username, projectionStyle]);
 
-return (
-  <div style={{ position: "relative", width: "100vw", height: "100vh" }}>
-    {/* Timeline Toggle Button - Below Header */}
-    <div className="absolute top-12 right-2 z-[1000] font-[pixel] text-[10px]">
-      <SystemButton 
-        text={showTimeline ? 'Hide Timeline' : 'Show Timeline'}
-        onClick={toggleTimeline}
-      />
-    </div>
+  return (
+    <div style={{ position: "relative", width: "100vw", height: "100vh" }}>
+      {/* Timeline Toggle Button - Below Header */}
+      <div className="absolute top-14 right-2 z-[1000] font-[pixel] text-[10px]">
+        <SystemButton
+          text={showTimeline ? "Hide Timeline" : "Show Timeline"}
+          onClick={toggleTimeline}
+        />
+      </div>
     <div
     id="geocoder-container"
     className="absolute top-12 left-2 z-[1000] w-[250px]"
     ></div>
 
 
-    {/* Back Button */}
-    {!permission && (
-      <button
-        onClick={onBack}
-        style={{
-          position: "absolute",
-          top: "12px",
-          right: "10px",
-          zIndex: 20,
-          padding: "8px 12px",
-          backgroundColor: "#fff",
-          border: "none",
-          borderRadius: "4px",
-          cursor: "pointer",
-          boxShadow: "0 0 5px rgba(0,0,0,0.2)",
-        }}
-      >
-        Back
-      </button>
-    )}
+      {/* Back Button */}
+      {!permission && (
+        <div className="z-20 absolute top-24 right-2 font-[pixel] text-[9px]">
+          <SystemButton text="Back" onClick={onBack} />
+        </div>
+      )}
 
-    {/* Loading overlay */}
-    {isLocating && (
-      <div
+      {/* Loading overlay */}
+      {isLocating && (
+        <div
+          style={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            width: "100%",
+            height: "100%",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            zIndex: 10,
+            backgroundColor: "rgba(0,0,0,0.3)",
+          }}
+        >
+          <div style={{ color: "white", fontSize: "20px" }}>
+            Locating you...
+          </div>
+        </div>
+      )}
+
+      {/* Pixelated map layer */}
+      <canvas
+        ref={pixelCanvasRef}
         style={{
           position: "absolute",
           top: 0,
           left: 0,
           width: "100%",
           height: "100%",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          zIndex: 10,
-          backgroundColor: "rgba(0,0,0,0.3)",
+          zIndex: 1,
+          pointerEvents: "none",
         }}
-      >
-        <div style={{ color: "white", fontSize: "20px" }}>Locating you...</div>
-      </div>
-    )}
-
-    {/* Pixelated map layer */}
-    <canvas
-      ref={pixelCanvasRef}
-      style={{
-        position: "absolute",
-        top: 0,
-        left: 0,
-        width: "100%",
-        height: "100%",
-        zIndex: 1,
-        pointerEvents: "none",
-      }}
-    />
-
-    {/* Main map container */}
-    <div
-      ref={mapContainer}
-      style={{
-        position: "absolute",
-        top: 0,
-        left: 0,
-        width: "100%",
-        height: "100%",
-        zIndex: 2,
-        background: "transparent !important",
-      }}
-    />
-
-    {/* Control Buttons Bottom Right */}
-    <div className="absolute bottom-2 right-2 z-[1000] font-[pixel] text-[10px] flex flex-col space-y-2">
-      <SystemButton 
-        text="Locate Me" 
-        onClick={locateUser} 
       />
-      <SystemButton
-        text={`Switch to ${projectionStyle === 'globe' ? '2D' : '3D'} View`}
-        onClick={toggleProjection}
-      />
-    </div>
 
-    {/* Memory Form */}
-    {showForm && (
-      <NewMemoryForm
-        newMemory={newMemory}
-        setNewMemory={setNewMemory}
-        onFileChange={handleFileChange}
-        onVoiceMemo={handleVoiceMemo}
-        onSave={handleSave}
-        onCancel={handleCancel}
+      {/* Main map container */}
+      <div
+        ref={mapContainer}
+        style={{
+          position: "absolute",
+          top: 0,
+          left: 0,
+          width: "100%",
+          height: "100%",
+          zIndex: 2,
+          background: "transparent !important",
+        }}
       />
-    )}
 
-    {/* Timeline */}
-    {showTimeline && (
-      <div style={{
-        position: "absolute",
-        bottom: 0,
-        left: 0,
-        right: 0,
-        zIndex: 10,
-        height: "40vh",
-        backgroundColor: "white",
-        boxShadow: "0 -2px 10px rgba(0,0,0,0.1)",
-      }}>
-        <Timeline
-          memories={memories}
-          onClose={toggleTimeline}
-          onMemoryClick={handleMemoryClick}
-          selectedMemoryId={selectedMemoryId}
+      {/* Control Buttons Bottom Right */}
+      <div className="absolute bottom-10 right-2 z-[1000] font-[pixel] text-[10px] flex flex-col space-y-2">
+        <SystemButton text="Locate Me" onClick={locateUser} />
+        <SystemButton
+          text={`Switch to ${projectionStyle === "globe" ? "2D" : "3D"} View`}
+          onClick={toggleProjection}
         />
       </div>
-    )}
-  </div>
-);
+
+      {/* Memory Form */}
+      {showForm && (
+        <NewMemoryForm
+          newMemory={newMemory}
+          setNewMemory={setNewMemory}
+          onFileChange={handleFileChange}
+          onVoiceMemo={handleVoiceMemo}
+          onSave={handleSave}
+          onCancel={handleCancel}
+        />
+      )}
+
+      {/* Timeline */}
+      {showTimeline && (
+        <div
+          style={{
+            position: "absolute",
+            bottom: 0,
+            left: 0,
+            right: 0,
+            zIndex: 10000,
+            height: "40vh",
+            backgroundColor: "white",
+            boxShadow: "0 -2px 10px rgba(0,0,0,0.1)",
+          }}
+        >
+          <Timeline
+            memories={memories}
+            onClose={toggleTimeline}
+            onMemoryClick={handleMemoryClick}
+            selectedMemoryId={selectedMemoryId}
+          />
+        </div>
+      )}
+    </div>
+  );
 }
 
-export default  MemoryMap;
+export default MemoryMap;

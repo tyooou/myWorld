@@ -6,14 +6,19 @@ import JournalEntry from "./JournalEntry";
 import SystemButton from "../system/SystemButton";
 import SystemPanel from "../system/SystemPanel";
 import SystemTabs from "../system/SystemTabs";
+import SystemAudio from "../system/SystemAudio";
+import NewMemoryForm from "./NewMemoryForm";
 
 const FORM_WIDTH = 380;
 const FORM_HEIGHT = 520;
 const clamp = (val, min, max) => Math.min(Math.max(val, min), max);
 
-export default function NewMemoryForm({
-  newMemory,
+export default function SavedDetails({
+  memory,
   setNewMemory,
+  perms,
+  newMemory,
+
   onFileChange,
   onVoiceMemo,
   onSave,
@@ -27,7 +32,8 @@ export default function NewMemoryForm({
     startX: 0,
     startY: 0,
   });
-  const [activeTab, setActiveTab] = useState("Details");
+  const [activeTab, setActiveTab] = useState("details");
+  console.log("SavedDetails newMemory:", memory);
 
   const [tags, setTags] = useState(() => {
     try {
@@ -52,6 +58,7 @@ export default function NewMemoryForm({
   const [showCustomInput, setShowCustomInput] = useState(false);
   const [customTag, setCustomTag] = useState("");
   const [customTagColor, setCustomTagColor] = useState("#ff69b4");
+  const [showform, setShowForm] = useState(false);
 
   useEffect(() => {
     localStorage.setItem("memoryTags", JSON.stringify(tags));
@@ -145,12 +152,7 @@ export default function NewMemoryForm({
         );
 
       case "Pictures":
-        return (
-          <ImageUploader
-            onSave={() => console.log("Saved Pics)")}
-            newMemory={newMemory}
-          />
-        );
+        return <ImageUploader onSave={() => console.log("Saved Pics)")} />;
 
       default:
         return null;
@@ -161,27 +163,63 @@ export default function NewMemoryForm({
 
   return (
     <SystemPanel
-      title="Create New Memory"
+      title={memory.title || "Untitled Memory"}
       onMouseDown={(e) => handleMouseDown(e)}
-      onClick={onCancel}
       style={{ left: pos.x, top: pos.y, position: "fixed" }}
     >
-      <SystemTabs
-        options={options}
-        setActive={setActiveTab}
-        activeTab={activeTab}
-      />
       <div
-        className="p-3 overflow-y-auto"
+        className="p-3 overflow-y-auto max-w-[500px]"
         style={{ maxHeight: FORM_HEIGHT - 150 }}
       >
-        {renderTabContent()}
+        <h4 className="text-sm font-medium mb-2 ">Journal:</h4>
+        <memory className="Journal">{memory.journal}</memory>
+
+        {/* Display images from public folder */}
+        {memory.files && memory.files.length > 0 && (
+          <div className="mt-4">
+            <h4 className="text-sm font-medium mb-2">Attached Images:</h4>
+            <div className="grid grid-cols-2 gap-2">
+              {memory.files.map((filename, index) => (
+                <div key={index} className="relative">
+                  <img
+                    src={`/${filename}`}
+                    alt={`Memory image ${index + 1}`}
+                    className="w-full h-24 object-cover rounded"
+                    onError={(e) => {
+                      e.target.style.display = "none";
+                    }}
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Display voice memo if it exists */}
+        {memory.voiceMemo && (
+          <div className="mt-4 flex flex-col">
+            <h4 className="text-sm font-medium mb-2">Voice Memo:</h4>
+            <SystemAudio audioURL={memory.voiceMemo} />
+          </div>
+        )}
       </div>
 
-      <div className="flex justify-end gap-2 p-3 border-t border-gray-300">
-        <SystemButton text="Save" onClick={onSave} />
-        <SystemButton text="Discard" onClick={onCancel} />
-      </div>
+      {perms && (
+        <div className="flex justify-end gap-2 p-3 border-t border-gray-300">
+          <SystemButton onClick={() => setShowForm(true)} text="Edit" />
+        </div>
+      )}
+
+      {showform && (
+        <NewMemoryForm
+          newMemory={newMemory}
+          setNewMemory={setNewMemory}
+          onFileChange={onFileChange}
+          onVoiceMemo={onVoiceMemo}
+          onSave={onSave}
+          onCancel={onCancel}
+        />
+      )}
     </SystemPanel>
   );
 }
