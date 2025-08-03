@@ -107,6 +107,7 @@ export default function SavedDetails({
   const handleMouseUp = () => {
     dragData.current.dragging = false;
   };
+  
 
   useEffect(() => {
     document.addEventListener("mousemove", handleMouseMove);
@@ -170,10 +171,10 @@ export default function SavedDetails({
       style={{ left: pos.x, top: pos.y, position: "fixed" }}
     >
       <div
-        className="p-3 overflow-y-auto"
+        className="p-3 overflow-y-auto max-w-[500px]"
         style={{ maxHeight: FORM_HEIGHT - 150 }}
       >
-        <h4 className="text-sm font-medium mb-2">Journal:</h4>
+        <h4 className="text-sm font-medium mb-2 ">Journal:</h4>
         <memory className="Journal">{memory.journal}</memory>
         
         {/* Display images from public folder */}

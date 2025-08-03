@@ -8,6 +8,7 @@ export default function ImageUploader({ onSave }) {
   const handleImageChange = (e) => {
     const files = Array.from(e.target.files);
     if (files.length === 0) return;
+  console.log(files);
 
     const previews = [];
 
@@ -25,6 +26,8 @@ export default function ImageUploader({ onSave }) {
       reader.readAsDataURL(file);
     });
   };
+
+ 
 
   return (
     <div>

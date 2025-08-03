@@ -27,7 +27,7 @@ export default function NewMemoryForm({
     startX: 0,
     startY: 0,
   });
-  const [activeTab, setActiveTab] = useState("details");
+  const [activeTab, setActiveTab] = useState("Details");
 
   const [tags, setTags] = useState(() => {
     try {
@@ -150,6 +150,8 @@ export default function NewMemoryForm({
       default:
         return null;
     }
+
+    
   };
 
   const options = ["Details", "Journal", "Voice", "Pictures"];
@@ -158,6 +160,7 @@ export default function NewMemoryForm({
     <SystemPanel
       title="Create New Memory"
       onMouseDown={(e) => handleMouseDown(e)}
+      onClick={onCancel}
       style={{ left: pos.x, top: pos.y, position: "fixed" }}
     >
       <SystemTabs

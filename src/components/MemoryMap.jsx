@@ -1,10 +1,14 @@
-import React, { useRef, useEffect, useState } from 'react';
-import mapboxgl from 'mapbox-gl';
-import 'mapbox-gl/dist/mapbox-gl.css';
-import './MemoryMap.css';
+import React, { useRef, useEffect, useState } from "react";
+import mapboxgl from "mapbox-gl";
+import "mapbox-gl/dist/mapbox-gl.css";
+import "./MemoryMap.css";
+import NewMemoryForm from "./memory/NewMemoryForm.jsx";
+import SystemButton from "./system/SystemButton.jsx";
+
+import { jamals_data, daves_data, diddyani_data } from "../Data/UserData.js";
 
 import SavedDetails from './memory/SavedDetails.jsx';
-import NewMemoryForm from './memory/NewMemoryForm.jsx';
+
 
 
 mapboxgl.accessToken = 'pk.eyJ1IjoiZWJvcndlZWQiLCJhIjoiY21kdG1mcjNkMHBneTJsb24zZzdsZHQycyJ9.B6OMNYu8tzRTiYXh5xLOpQ';
@@ -14,10 +18,59 @@ export default function MemoryMap({ name, permission, onBack }) {
   const pixelCanvasRef = useRef(null);
   const mapInstance = useRef(null);
   const rafRef = useRef(null);
-  const [memories, setMemories] = useState(name?.memories || []);
+
+  const username = name.profile.username;
+
+  console.log('Current username:', username);
+
+  // Helper function to get user data structure
+  const getUserDataStructure = () => {
+    const storageKey = `userData_${username}`;
+    try {
+      const stored = localStorage.getItem(storageKey);
+      if (stored) {
+        return JSON.parse(stored);
+      }
+    } catch (err) {
+      console.error("Error parsing localStorage for", username, err);
+    }
+    
+    // Return default structure if nothing exists
+    return {
+      profile: name.profile,
+      memories: []
+    };
+  };
+
+  // Helper function to save user data
+  const saveUserData = (userData) => {
+    const storageKey = `userData_${username}`;
+    try {
+      localStorage.setItem(storageKey, JSON.stringify(userData));
+      console.log('Saved to localStorage:', storageKey, userData);
+    } catch (err) {
+      console.error("Error saving to localStorage:", err);
+    }
+  };
+
+  // Initialize memories from localStorage
+  const [memories, setMemories] = useState(() => {
+    const userData = getUserDataStructure();
+    console.log('Initial memories loaded:', userData.memories);
+    return userData.memories || [];
+  });
+
   const [isSwitchingUser, setIsSwitchingUser] = useState(false);
 
-
+  // assign each username a unique color
+  const userColorMap = {
+    wander_joe: "#E74C3C",
+    dave_explorer: "#2ECC71",
+    mclovin: "#3498DB",
+    sesalover123: "#F1C40F",
+    ibrahimovic: "#9B59B6",
+    rocketleaguer55: "#1ABC9C"
+  };
 
 useEffect(() => {
   setIsSwitchingUser(true);
@@ -27,7 +80,7 @@ useEffect(() => {
 
   useEffect(() => {
     if (!mapInstance.current) return;
-  
+
     const waitUntilReady = () => {
       if (mapInstance.current.isStyleLoaded()) {
         updateMapMarkers();
@@ -35,7 +88,7 @@ useEffect(() => {
         setTimeout(waitUntilReady, 100);
       }
     };
-  
+
     waitUntilReady();
   }, [memories]);
   
@@ -43,12 +96,12 @@ useEffect(() => {
   const [showForm, setShowForm] = useState(false);
   const [formPosition, setFormPosition] = useState({ lat: 0, lng: 0 });
   const [newMemory, setNewMemory] = useState({
-    title: '',
-    journal: '',
+    title: "",
+    journal: "",
     files: [],
     voiceMemo: null,
-    country: '',
-    tag: '',
+    country: "",
+    tag: "",
     coordinate: { lat: null, lng: null },
   });
   const previousViewRef = useRef({ center: [0, 20], zoom: 4 });
@@ -57,7 +110,7 @@ useEffect(() => {
   const [isLocating, setIsLocating] = useState(false);
 
   // Degrees to radians
-  const toRad = deg => (deg * Math.PI) / 180;
+  const toRad = (deg) => (deg * Math.PI) / 180;
 
   // Check if a point is visible on globe hemisphere
   const isVisibleOnGlobe = (center, point) => {
@@ -76,9 +129,11 @@ useEffect(() => {
     if (!mapInstance.current) return;
     const center = mapInstance.current.getCenter();
     markerObjs.current.forEach(({ mem, marker }) => {
-      const { coordinate: { lat, lng } } = mem;
+      const {
+        coordinate: { lat, lng },
+      } = mem;
       if (isVisibleOnGlobe(center, { lat, lng })) {
-        marker.getElement().style.display = '';
+        marker.getElement().style.display = "";
       } else {
         marker.getElement().style.display = 'none';
       }
@@ -87,39 +142,43 @@ useEffect(() => {
 
   const updateMapMarkers = () => {
     if (!mapInstance.current) return;
-  
+
     // Remove existing markers
     markerObjs.current.forEach(({ marker }) => marker.remove());
     markerObjs.current = [];
-  
+
     // Add new ones
     memories.forEach(mem => {
       const { coordinate: { lng, lat } } = mem;
-      const marker = new mapboxgl.Marker()
+      // determine which user this memory belongs to
+      const who = mem.friend || name.profile.username;
+      const color = userColorMap[who] || "#000000";
+
+      // create a colored marker
+      const marker = new mapboxgl.Marker({ color })
         .setLngLat([lng, lat])
         .addTo(mapInstance.current);
-  
-      marker.getElement().addEventListener('click', (e) => {
+
+      marker.getElement().addEventListener("click", (e) => {
         e.stopPropagation();
         setNewMemory({
           title: mem.title,
-          journal: mem.journal || '',
+          journal: mem.journal || "",
           files: mem.files,
           voiceMemo: mem.voiceMemo,
           country: mem.country,
           tag: mem.tag,
-          coordinate: { lat, lng }
+          coordinate: { lat, lng },
         });
         setFormPosition({ lat, lng });
         setShowPinDetail(true);
       });
-  
+
       markerObjs.current.push({ mem, marker });
     });
-  
+
     updateMarkerVisibility();
   };
-  
 
   const locateUser = () => {
     if (!navigator.geolocation) {
@@ -133,14 +192,14 @@ useEffect(() => {
         const { longitude, latitude } = position.coords;
         previousViewRef.current = {
           center: [longitude, latitude],
-          zoom: 4
+          zoom: 4,
         };
 
         if (mapInstance.current) {
           mapInstance.current.flyTo({
             center: [longitude, latitude],
             zoom: 4,
-            essential: true
+            essential: true,
           });
         }
         setIsLocating(false);
@@ -153,7 +212,7 @@ useEffect(() => {
       {
         enableHighAccuracy: true,
         timeout: 5000,
-        maximumAge: 0
+        maximumAge: 0,
       }
     );
   };
@@ -178,21 +237,38 @@ useEffect(() => {
       alert("Please enter a title");
       return;
     }
-
+  
     const memoryToAdd = {
+      id: Date.now(), // Add unique ID for better tracking
       title: newMemory.title,
       journal: newMemory.journal,
       files: newMemory.files,
       voiceMemo: newMemory.voiceMemo,
       country: newMemory.country,
       tag: newMemory.tag,
-      coordinate: newMemory.coordinate
+      coordinate: newMemory.coordinate,
+      createdAt: new Date().toISOString() // Add timestamp
     };
-
-    setMemories([...memories, memoryToAdd]);
-    //use local storage here to store it
+  
+    const updatedMemories = [...memories, memoryToAdd];
+    
+    // Update state
+    setMemories(updatedMemories);
+  
+    // Get current user data and update it
+    const currentUserData = getUserDataStructure();
+    const updatedUserData = {
+      ...currentUserData,
+      memories: updatedMemories
+    };
+  
+    // Save to localStorage
+    saveUserData(updatedUserData);
+  
+    console.log("New memory saved for user:", username);
+    console.log("Updated memories:", updatedMemories);
+  
     setShowForm(false);
-
     if (tempMarkerRef.current) {
       tempMarkerRef.current.remove();
       tempMarkerRef.current = null;
@@ -222,15 +298,15 @@ useEffect(() => {
       antialias: true,
     });
 
-    mapInstance.current.on('load', () => {
+    mapInstance.current.on("load", () => {
       locateUser();
       updateMapMarkers();
 
-      mapInstance.current.on('click', (e) => {
+      mapInstance.current.on("click", (e) => {
         if (
-          !permission ||  // <-- here: if no permission, block adding new pins
-          e.originalEvent.target.closest('.mapboxgl-marker') ||
-          e.originalEvent.target.closest('.mapboxgl-popup')
+          !permission || // <-- here: if no permission, block adding new pins
+          e.originalEvent.target.closest(".mapboxgl-marker") ||
+          e.originalEvent.target.closest(".mapboxgl-popup")
         ) {
           return;
         }
@@ -249,15 +325,16 @@ useEffect(() => {
         mapInstance.current.flyTo({
           center: [lng, lat],
           zoom: 11,
-          essential: true
+          essential: true,
         });
 
-        const el = document.createElement('div');
-        el.className = 'Marker';
-        el.style.backgroundImage = 'url(https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-blue.png)';
-        el.style.width = '25px';
-        el.style.height = '41px';
-        el.style.backgroundSize = 'contain';
+        const el = document.createElement("div");
+        el.className = "Marker";
+        el.style.backgroundImage =
+          "url(https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-blue.png)";
+        el.style.width = "25px";
+        el.style.height = "41px";
+        el.style.backgroundSize = "contain";
 
         tempMarkerRef.current = new mapboxgl.Marker(el)
           .setLngLat([lng, lat])
@@ -268,17 +345,23 @@ useEffect(() => {
         setFormPosition({ lat, lng });
         setShowForm(true);
         setNewMemory({
-          title: '',
-          journal: '',
+          title: "",
+          journal: "",
           files: [],
           voiceMemo: null,
-          country: '',
-          tag: '',
-          coordinate: { lat, lng }
+          country: "",
+          tag: "",
+          coordinate: { lat, lng },
         });
       });
 
-      ['move', 'rotate', 'pitch', 'zoom'].forEach(eventName => {
+      // Sync visibility when the globe moves/rotates/etc.
+      mapInstance.current.on("move", updateMarkerVisibility);
+      mapInstance.current.on("rotate", updateMarkerVisibility);
+      mapInstance.current.on("pitch", updateMarkerVisibility);
+      mapInstance.current.on("zoom", updateMarkerVisibility);
+
+      ["move", "rotate", "pitch", "zoom"].forEach((eventName) => {
         mapInstance.current.on(eventName, updateMarkerVisibility);
       });
 
@@ -302,25 +385,48 @@ useEffect(() => {
 
         const scale = minScale + t * (maxScale - minScale);
 
-        if (pixelCanvas.width !== mapCanvas.width || pixelCanvas.height !== mapCanvas.height) {
+        if (
+          pixelCanvas.width !== mapCanvas.width ||
+          pixelCanvas.height !== mapCanvas.height
+        ) {
           pixelCanvas.width = mapCanvas.width;
           pixelCanvas.height = mapCanvas.height;
         }
 
-        const ctx = pixelCanvas.getContext('2d');
+        const ctx = pixelCanvas.getContext("2d");
         const sw = Math.max(1, Math.floor(mapCanvas.width * scale));
         const sh = Math.max(1, Math.floor(mapCanvas.height * scale));
 
-        const tmpCanvas = document.createElement('canvas');
+        const tmpCanvas = document.createElement("canvas");
         tmpCanvas.width = sw;
         tmpCanvas.height = sh;
-        const tmpCtx = tmpCanvas.getContext('2d');
+        const tmpCtx = tmpCanvas.getContext("2d");
 
-        tmpCtx.drawImage(mapCanvas, 0, 0, mapCanvas.width, mapCanvas.height, 0, 0, sw, sh);
+        tmpCtx.drawImage(
+          mapCanvas,
+          0,
+          0,
+          mapCanvas.width,
+          mapCanvas.height,
+          0,
+          0,
+          sw,
+          sh
+        );
 
         ctx.imageSmoothingEnabled = false;
         ctx.clearRect(0, 0, pixelCanvas.width, pixelCanvas.height);
-        ctx.drawImage(tmpCanvas, 0, 0, sw, sh, 0, 0, pixelCanvas.width, pixelCanvas.height);
+        ctx.drawImage(
+          tmpCanvas,
+          0,
+          0,
+          sw,
+          sh,
+          0,
+          0,
+          pixelCanvas.width,
+          pixelCanvas.height
+        );
 
         rafRef.current = requestAnimationFrame(pixelateMap);
       };
@@ -335,7 +441,7 @@ useEffect(() => {
         mapInstance.current = null;
       }
     };
-  }, [permission,name]);
+  }, [permission, username]); // Changed dependency from name to username
 
   useEffect(() => {
     if (mapInstance.current && mapInstance.current.isStyleLoaded()) {
@@ -344,50 +450,54 @@ useEffect(() => {
   }, [memories]);
 
   return (
-    <div style={{ position: 'relative', width: '100vw', height: '100vh' }}>
+    <div style={{ position: "relative", width: "100vw", height: "100vh" }}>
       {/* Back Button */}
       {!permission && (
-      <button
-        onClick={onBack}
-        style={{
-          position: 'absolute',
-          top: '10px',
-          right: '10px',
-          zIndex: 20,
-          padding: '8px 12px',
-          backgroundColor: '#fff',
-          border: 'none',
-          borderRadius: '4px',
-          cursor: 'pointer',
-          boxShadow: '0 0 5px rgba(0,0,0,0.2)'
-        }}
-      >
-        Back
-      </button>
-    )}
-
+        <button
+          onClick={onBack}
+          style={{
+            position: "absolute",
+            top: "10px",
+            right: "10px",
+            zIndex: 20,
+            padding: "8px 12px",
+            backgroundColor: "#fff",
+            border: "none",
+            borderRadius: "4px",
+            cursor: "pointer",
+            boxShadow: "0 0 5px rgba(0,0,0,0.2)",
+          }}
+        >
+          Back
+        </button>
+      )}
 
       {/* Loading overlay */}
       {isLocating && (
-        <div style={{
-          position: 'absolute',
-          top: 0, left: 0, width: '100%', height: '100%',
-          backgroundColor: 'rgba(0,0,0,0.5)',
-          display: 'flex', justifyContent: 'center', alignItems: 'center',
-          zIndex: 10
-        }}>
-          <div style={{ padding: '20px', background: 'white', borderRadius: '8px' }}>
-            Locating you...
-          </div>
-        </div>
+        <div
+          style={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            width: "100%",
+            height: "100%",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            zIndex: 10,
+          }}
+        ></div>
       )}
 
       {/* Pixelated map layer */}
       <canvas
         ref={pixelCanvasRef}
         style={{
-          position: 'absolute',
-          top: 0, left: 0, width: '100%', height: '100%',
+          position: "absolute",
+          top: 0,
+          left: 0,
+          width: "100%",
+          height: "100%",
           zIndex: 1,
           pointerEvents: 'none',
         }}
@@ -397,31 +507,20 @@ useEffect(() => {
       <div
         ref={mapContainer}
         style={{
-          position: 'absolute',
-          top: 0, left: 0, width: '100%', height: '100%',
+          position: "absolute",
+          top: 0,
+          left: 0,
+          width: "100%",
+          height: "100%",
           zIndex: 2,
           background: 'transparent !important'
         }}
       />
 
       {/* Locate me button */}
-      <button
-        onClick={locateUser}
-        style={{
-          position: 'absolute',
-          bottom: '20px',
-          right: '20px',
-          zIndex: 3,
-          padding: '10px',
-          background: 'white',
-          border: 'none',
-          borderRadius: '4px',
-          cursor: 'pointer',
-          boxShadow: '0 0 10px rgba(0,0,0,0.2)'
-        }}
-      >
-        Locate Me
-      </button>
+      <div className="absolute bottom-10 right-1 z-[1000] font-[pixel] text-[10px]">
+        <SystemButton text="Locate Me" onClick={locateUser} />
+      </div>
 
       {showForm && (
         <NewMemoryForm

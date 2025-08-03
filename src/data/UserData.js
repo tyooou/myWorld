@@ -3,13 +3,13 @@ export const jamals_data = {
   profile: {
     age: 21,
     username: 'wander_joe',
-    hometown: 'Auckland'
+    hometown: 'Paris'
   },
   memories: [
     {
       title: "Melbourne Skyline",
       journal: "I woke before dawn to catch the sunrise over Melbourne’s skyline. The streets were quiet and the skyscrapers along the Yarra River glowed in soft pastel light as the city came to life.",
-      files: ['IMG_1716.jpg'],              // default image
+      files: ['IMG_1716.jpg'],           
       voiceMemo: 'melbourne-ambience.webm',
       country: 'Australia',
       tag: 'travel',
@@ -38,74 +38,176 @@ export const jamals_data = {
 
 export const daves_data = {
   profile: {
-    age: 25,
+    age: 20,
     username: 'dave_explorer',
     hometown: 'Kathmandu'
   },
   memories: [
     {
-      title: 'Wembley Concert',
-      journal: "",               // change boolean → empty string
-      files: ['wembley1.jpg', 'wembley2.jpg'],
+      title: 'Temple in Malaysia',
+      journal: "I climbed the colorful steps of Batu Caves near Kuala Lumpur, surrounded by worshippers and cheeky monkeys. The cavernous temple was bathed in golden light as incense smoke curled through the air.",
+      files: ['IMG_9772.jpeg'],
       voiceMemo: 'wembley-crowd.webm',
-      country: 'UK',
+      country: 'Malaysia',                      // fixed country
       tag: 'music',
-      coordinate: { lat: 51.556, lng: -0.279 }
+      coordinate: { lat: 3.2379, lng: 101.6831 } // updated coords
     },
     {
-      title: 'Thames River Cruise',
-      journal: "",               // no journal text for this photo memory
-      files: ['thames-boat.png'],
+      title: 'Singapore Exchange',
+      journal: "I toured the bustling trading floor of the Singapore Exchange, marveling at the digital tickers and the energy of brokers making deals in the heart of downtown.",
+      files: ['SAM_7621.jpeg'],
+      voiceMemo: 'wembley-crowd.webm',
+      country: 'Singapore',                    // fixed country/spelling
+      tag: 'music',
+      coordinate: { lat: 1.3521, lng: 103.8198 }
+    },
+    {
+      title: 'Mt. Ruapehu Ski Trip',
+      journal: "Skiing down the slopes of Mt. Ruapehu was exhilarating—snow flew up around my skis and the volcanic peak loomed above, clouds swirling in the crisp air.",
+      files: ['DSCF6753.jpeg', 'DSCF6754.jpeg'],
       voiceMemo: null,
-      country: 'UK',
+      country: 'New Zealand',                  // fixed country
       tag: 'travel',
-      coordinate: { lat: 51.5079, lng: -0.0877 }
+      coordinate: { lat: -39.2812, lng: 175.6077 }
     },
     {
-      title: 'Cambridge Weekend',
-      journal: "",               // change boolean → empty string
-      files: ['cambridge1.jpg', 'cambridge2.jpg'],
+      title: 'Buddhist Temple in Hong Kong',
+      journal: "I visited the Po Lin Monastery on Lantau Island, listening to bells echo across the misty courtyard and admiring the giant statue of Tian Tan Buddha.",
+      files: ['IMG_2498.jpeg', 'IMG_2558.jpeg'],
       voiceMemo: 'market-bells.webm',
-      country: 'UK',
+      country: 'Hong Kong',                    // fixed country
       tag: 'adventure',
-      coordinate: { lat: 52.2043, lng: 0.1218 }
+      coordinate: { lat: 22.3964, lng: 114.1095 }
     }
   ]
 };
 
 export const diddyani_data = {
   profile: {
-    age: 28,
-    username: 'diddyani_artsy',
-    hometown: 'Paris'
+    age: 20,
+    username: 'mclovin',
+    hometown: 'New Dehli'
   },
   memories: [
     {
-      title: 'Eiffel Tower Visit',
-      journal: "",               // change boolean → empty string
-      files: ['eiffel-day.jpg'],
+      title: 'Isla Pasion with the FAM',
+      journal: "Spent a sun-soaked day with family on Isla Pasion, snorkeling in turquoise Caribbean waters and picnicking on white-sand beaches just off the coast of Playa Del Carmen.",
+      files: ['arni1.jpg', 'arni2.jpg', 'arni3.jpg'],
       voiceMemo: 'tower-ambience.webm',
-      country: 'France',
-      tag: 'landmark',
-      coordinate: { lat: 48.8584, lng: 2.2945 }
+      country: 'Mexico',
+      tag: 'family',
+      coordinate: { lat: 21.2329, lng: -86.7165 }
     },
     {
-      title: 'Louvre Sketching',
-      journal: "",               // no journal text for this photo memory
-      files: ['louvre-sketch.png'],
+      title: 'Queens Town with Friends!',
+      journal: "Arrived in Queenstown, New Zealand with friends and tested our limits bungee jumping over the Kawarau River before celebrating with lakeside dinners and craft beers.",
+      files: ['arni6.jpg', 'arni7.jpg', 'arni8.jpg'],
       voiceMemo: null,
-      country: 'France',
-      tag: 'art',
-      coordinate: { lat: 48.8606, lng: 2.3376 }
+      country: 'New Zealand',
+      tag: 'adventure',
+      coordinate: { lat: -45.0312, lng: 168.6626 }
     },
     {
-      title: 'Bordeaux Wine Tasting',
-      journal: "",               // change boolean → empty string
-      files: ['bordeaux-wine.jpg'],
+      title: 'Professional Big Back in AMERICA',
+      journal: "Embarked on a cross-country road trip along Route 66, stopping at neon diners, vintage motels, and iconic landmarks from Chicago to Santa Monica.",
+      files: ['arni4.jpg', 'arni5.jpg'],
       voiceMemo: 'vineyard-sounds.webm',
-      country: 'France',
+      country: 'USA',
+      tag: 'road trip',
+      coordinate: { lat: 39.8283, lng: -98.5795 }
+    }
+  ]
+};
+
+export const tyou_data = {
+  profile: {
+    age: 20,
+    username: 'sesalover123',
+    hometown: 'GuangZhou'
+  },
+  memories: [
+    {
+      title: 'First Kiss',
+      journal: "Under the neon lights of Gangnam district, I shared my first kiss atop a rooftop bar. The city’s energy pulsed below as we laughed under the stars.",
+      files: ['Screenshot_20250306_081853_Instagram.jpg'],
+      voiceMemo: 'tower-ambience.webm',
+      country: 'South Korea',
+      tag: 'romance',
+      coordinate: { lat: 37.4979, lng: 127.0276 }
+    },
+    {
+      title: 'Wet’n’Wild',
+      journal: "Rode the giant slides at Wet’n’Wild Gold Coast and surfed the waves at Surfers Paradise. Sunshine, salt water, and adrenaline made it one of my most thrilling days.",
+      files: ['IMG_20250109_234143_812.jpg'],
+      voiceMemo: null,
+      country: 'Australia',
+      tag: 'adventure',
+      coordinate: { lat: -28.0167, lng: 153.4000 }
+    },
+    {
+      title: 'First American Election',
+      journal: "Stood in line at a polling station in Houston, Texas, and cast my first-ever vote in a U.S. election. It felt surreal to participate in the democratic process.",
+      files: ['IMG_20250109_234143_840.jpg'],
+      voiceMemo: 'vineyard-sounds.webm',
+      country: 'USA',
+      tag: 'politics',
+      coordinate: { lat: 29.7604, lng: -95.3698 }
+    }
+  ]
+};
+
+export const ibra_data = {
+  profile: {
+    age: 20,
+    username: 'ibrahimovic',
+    hometown: 'Moscow'
+  },
+  memories: [
+    {
+      title: 'Cafe Hopping',
+      journal: "I spent the afternoon exploring hidden coffee shops in Bangkok’s Thonglor district, sipping aromatic brews and sampling local pastries at each stop.",
+      files: ['ibra1.jpg'],
+      voiceMemo: 'tower-ambience.webm',
+      country: 'Thailand',
       tag: 'food & drink',
-      coordinate: { lat: 44.8413, lng: -0.5805 }
+      coordinate: { lat: 13.7367, lng: 100.5684 }
+    },
+    {
+      title: '10m from Chaewon',
+      journal: "CHAEWON CHAEWON CHAEWON CHAEWON CHAEWON CHAEWON CHAEWON CHAEWON CHAEWON CHAEWON CHAEWON CHAEWON CHAEWON CHAEWON CHAEWON CHAEWON CHAEWON CHAEWON ",
+      files: ['ibra2.jpg'],
+      voiceMemo: null,
+      country: 'South Korea',
+      tag: 'culture, kpop, music',
+      coordinate: { lat: 37.5665, lng: 126.9780 }
+    },
+    {
+      title: 'Cherry Blossom Season',
+      journal: "Wandered through the cherry blossoms at Osaka Castle Park, petals drifting like pink snow as families picnicked and poets composed haiku beneath the blooming trees.",
+      files: ['ibra3.jpg'],
+      voiceMemo: 'vineyard-sounds.webm',
+      country: 'Japan',
+      tag: 'nature',
+      coordinate: { lat: 34.6937, lng: 135.5023 }
+    }
+  ]
+};
+
+export const oshan_data = {
+  profile: {
+    age: 20,
+    username: 'rocketleaguer55',
+    hometown: 'Auckland'
+  },
+  memories: [
+    {
+      title: 'Beach Resort in Sri Lanka',
+      journal: "Relaxed on the golden sands of Mirissa Beach, watching fishing boats drift across the Indian Ocean as the sun dipped below the horizon and palm trees swayed in the warm sea breeze.",
+      files: ['oshan1.jpg', 'oshan2.jpg'],
+      voiceMemo: 'tower-ambience.webm',
+      country: 'Sri Lanka',
+      tag: 'relaxation',
+      coordinate: { lat: 5.9480, lng: 80.4515 }
     }
   ]
 };

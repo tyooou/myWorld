@@ -10,10 +10,9 @@ function SystemButton({ text = "OK", onClick = null }) {
     >
       <div className="p-[0.125rem]">
         <div
-          className="border-dotted border p-[0.25rem] text-center text-black"
+          className="border-dotted border py-[0.125rem] px-[0.25rem] text-center text-black"
           onClick={onClick}
         >
-          <i class="hn hn-location-pin"></i>
           {text}
         </div>
       </div>
