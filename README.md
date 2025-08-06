@@ -57,5 +57,5 @@ Each user gets a unique color for their pushpins:
 
 ---
 
-**Made with ❤️ and pixels** - Turn your world into an interactive memory map!+ Vite
+**Made with ❤️ and pixels** - Turn your world into an interactive memory map!
 
