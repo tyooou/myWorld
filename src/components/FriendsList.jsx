@@ -147,6 +147,12 @@ export default function FriendsList({ onClose, changeMap }) {
             onClick={() => handleViewProfile(regionalData)}
           />
         </div>
+        <div className="pb-2">
+          <SystemButton
+            text="View All Memories."
+            onClick={() => handleViewProfile(allData)}
+          />
+        </div>
         <div className="pl-2 pb-2">🟢 {friends.length} friends online</div>
       </SystemPanel>
     </div>

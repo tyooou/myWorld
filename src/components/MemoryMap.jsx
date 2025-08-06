@@ -5,9 +5,8 @@ import "./MemoryMap.css";
 import NewMemoryForm from "./memory/NewMemoryForm.jsx";
 import SystemButton from "./system/SystemButton.jsx";
 import Timeline from "./Timeline/Timeline.jsx"; // Make sure to import the Timeline component
-import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
-import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
-
+import MapboxGeocoder from "@mapbox/mapbox-gl-geocoder";
+import "@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css";
 
 import { jamals_data, daves_data, diddyani_data } from "../Data/UserData.js";
 
@@ -72,7 +71,7 @@ function MemoryMap({ name, permission, onBack }) {
   // assign each username a unique color
   const userColorMap = {
     wander_joe: "#E74C3C",
-    dave_explorer: "#2ECC71",
+    dave_explorer: "#FF69B4",
     mclovin: "#3498DB",
     sesalover123: "#F1C40F",
     ibrahimovic: "#9B59B6",
@@ -160,6 +159,108 @@ function MemoryMap({ name, permission, onBack }) {
     return d <= Math.PI / 2;
   };
 
+  // Create pixelated pin element with color
+  const createCustomPin = (color) => {
+    // Create a darker shade of the color for the border
+    const darkerColor = color.replace('#', '');
+    const r = parseInt(darkerColor.substr(0,2), 16);
+    const g = parseInt(darkerColor.substr(2,2), 16);
+    const b = parseInt(darkerColor.substr(4,2), 16);
+    const darkerR = Math.max(0, Math.floor(r * 0.4));
+    const darkerG = Math.max(0, Math.floor(g * 0.4));
+    const darkerB = Math.max(0, Math.floor(b * 0.4));
+    const borderColor = `#${darkerR.toString(16).padStart(2,'0')}${darkerG.toString(16).padStart(2,'0')}${darkerB.toString(16).padStart(2,'0')}`;
+    
+    // Create lighter shade for highlights
+    const lighterR = Math.min(255, Math.floor(r + (255 - r) * 0.4));
+    const lighterG = Math.min(255, Math.floor(g + (255 - g) * 0.4));
+    const lighterB = Math.min(255, Math.floor(b + (255 - b) * 0.4));
+    const lightColor = `#${lighterR.toString(16).padStart(2,'0')}${lighterG.toString(16).padStart(2,'0')}${lighterB.toString(16).padStart(2,'0')}`;
+    
+    const el = document.createElement("div");
+    el.className = "custom-pin";
+    el.style.width = "20px";
+    el.style.height = "28px";
+    el.style.backgroundImage = `url("data:image/svg+xml,${encodeURIComponent(`
+      <svg width="20" height="28" viewBox="0 0 20 28" xmlns="http://www.w3.org/2000/svg">
+        <!-- Exact recreation of the reference pushpin image -->
+        
+        <!-- Row 1 -->
+        <rect x="6" y="0" width="2" height="2" fill="${borderColor}"/>
+        <rect x="8" y="0" width="4" height="2" fill="${borderColor}"/>
+        <rect x="12" y="0" width="2" height="2" fill="${borderColor}"/>
+        
+        <!-- Row 2 -->
+        <rect x="4" y="2" width="2" height="2" fill="${borderColor}"/>
+        <rect x="6" y="2" width="2" height="2" fill="${lightColor}"/>
+        <rect x="8" y="2" width="4" height="2" fill="${color}"/>
+        <rect x="12" y="2" width="2" height="2" fill="${color}"/>
+        <rect x="14" y="2" width="2" height="2" fill="${borderColor}"/>
+        
+        <!-- Row 3 -->
+        <rect x="2" y="4" width="2" height="2" fill="${borderColor}"/>
+        <rect x="4" y="4" width="2" height="2" fill="${lightColor}"/>
+        <rect x="6" y="4" width="2" height="2" fill="${lightColor}"/>
+        <rect x="8" y="4" width="4" height="2" fill="${color}"/>
+        <rect x="12" y="4" width="2" height="2" fill="${color}"/>
+        <rect x="14" y="4" width="2" height="2" fill="${borderColor}"/>
+        <rect x="16" y="4" width="2" height="2" fill="${borderColor}"/>
+        
+        <!-- Row 4 -->
+        <rect x="2" y="6" width="2" height="2" fill="${borderColor}"/>
+        <rect x="4" y="6" width="2" height="2" fill="${lightColor}"/>
+        <rect x="6" y="6" width="2" height="2" fill="${lightColor}"/>
+        <rect x="8" y="6" width="4" height="2" fill="${color}"/>
+        <rect x="12" y="6" width="2" height="2" fill="${color}"/>
+        <rect x="14" y="6" width="2" height="2" fill="${borderColor}"/>
+        <rect x="16" y="6" width="2" height="2" fill="${borderColor}"/>
+        
+        <!-- Row 5 -->
+        <rect x="2" y="8" width="2" height="2" fill="${borderColor}"/>
+        <rect x="4" y="8" width="2" height="2" fill="${color}"/>
+        <rect x="6" y="8" width="2" height="2" fill="${color}"/>
+        <rect x="8" y="8" width="4" height="2" fill="${color}"/>
+        <rect x="12" y="8" width="2" height="2" fill="${borderColor}"/>
+        <rect x="14" y="8" width="2" height="2" fill="${borderColor}"/>
+        <rect x="16" y="8" width="2" height="2" fill="${borderColor}"/>
+        
+        <!-- Row 6 (body start) -->
+        <rect x="4" y="10" width="2" height="2" fill="${borderColor}"/>
+        <rect x="6" y="10" width="2" height="2" fill="${color}"/>
+        <rect x="8" y="10" width="4" height="2" fill="${color}"/>
+        <rect x="12" y="10" width="2" height="2" fill="${borderColor}"/>
+        <rect x="14" y="10" width="2" height="2" fill="${borderColor}"/>
+        
+        <!-- Row 7 -->
+        <rect x="4" y="12" width="2" height="2" fill="${borderColor}"/>
+        <rect x="6" y="12" width="2" height="2" fill="${borderColor}"/>
+        <rect x="8" y="12" width="2" height="2" fill="${color}"/>
+        <rect x="10" y="12" width="2" height="2" fill="${borderColor}"/>
+        <rect x="12" y="12" width="2" height="2" fill="${borderColor}"/>
+        
+        <!-- Row 8 (narrow part) -->
+        <rect x="6" y="14" width="2" height="2" fill="${borderColor}"/>
+        <rect x="8" y="14" width="2" height="2" fill="${borderColor}"/>
+        <rect x="10" y="14" width="2" height="2" fill="${borderColor}"/>
+        
+        <!-- Needle part -->
+        <rect x="8" y="16" width="2" height="2" fill="#C0C0C0"/>
+        <rect x="8" y="18" width="2" height="2" fill="#A0A0A0"/>
+        <rect x="8" y="20" width="2" height="2" fill="#808080"/>
+        <rect x="8" y="22" width="2" height="2" fill="#606060"/>
+        <rect x="8" y="24" width="2" height="2" fill="#404040"/>
+        <rect x="8" y="26" width="2" height="2" fill="#202020"/>
+      </svg>
+    `)}")`;
+    el.style.backgroundSize = "contain";
+    el.style.backgroundRepeat = "no-repeat";
+    el.style.cursor = "pointer";
+    el.style.imageRendering = "pixelated";
+    el.style.imageRendering = "-moz-crisp-edges";
+    el.style.imageRendering = "crisp-edges";
+    return el;
+  };
+
   const updateMarkerVisibility = () => {
     if (!mapInstance.current || projectionStyle !== "globe") return;
     const center = mapInstance.current.getCenter();
@@ -191,8 +292,9 @@ function MemoryMap({ name, permission, onBack }) {
       const who = mem.friend || name.profile.username;
       const color = userColorMap[who] || "#000000";
 
-      // create a colored marker
-      const marker = new mapboxgl.Marker({ color })
+      // create a custom pin marker
+      const pinElement = createCustomPin(color);
+      const marker = new mapboxgl.Marker(pinElement)
         .setLngLat([lng, lat])
         .addTo(mapInstance.current);
 
@@ -441,13 +543,8 @@ function MemoryMap({ name, permission, onBack }) {
           essential: true,
         });
 
-        const el = document.createElement("div");
-        el.className = "Marker";
-        el.style.backgroundImage =
-          "url(https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-blue.png)";
-        el.style.width = "25px";
-        el.style.height = "41px";
-        el.style.backgroundSize = "contain";
+        const el = createCustomPin("#4A90E2"); // Blue color for new memory
+        el.style.opacity = "0.8"; // Make it slightly transparent to indicate it's temporary
 
         tempMarkerRef.current = new mapboxgl.Marker(el)
           .setLngLat([lng, lat])
@@ -491,16 +588,14 @@ function MemoryMap({ name, permission, onBack }) {
         speed: 1,
         curve: 1,
         zoom: 11,
-        easing: (t) => t
-      }
+        easing: (t) => t,
+      },
     });
-    const geocoderContainer = document.getElementById('geocoder-container');
+    const geocoderContainer = document.getElementById("geocoder-container");
     if (geocoderContainer) {
-      geocoderContainer.innerHTML = ''; // Clear any previous geocoder
+      geocoderContainer.innerHTML = ""; // Clear any previous geocoder
       geocoderContainer.appendChild(geocoder.onAdd(mapInstance.current));
     }
-    
-
 
     return () => {
       cancelAnimationFrame(rafRef.current);
@@ -517,11 +612,10 @@ function MemoryMap({ name, permission, onBack }) {
           onClick={toggleTimeline}
         />
       </div>
-    <div
-    id="geocoder-container"
-    className="absolute top-12 left-2 z-[1000] w-[250px]"
-    ></div>
-
+      <div
+        id="geocoder-container"
+        className="absolute bottom-12 left-4 z-[1000] w-[250px] text-gray-800 rounded-none"
+      ></div>
 
       {/* Back Button */}
       {!permission && (
