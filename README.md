@@ -1,7 +1,7 @@
 
 # myWorld 🌍
 
-A retro-styled, pixelated interactive memory mapping experience built for the [SESA x WDCC Hackathon]([url](https://wdccxsesahackathon.com)) 2025 by Team Fullstack Big Backs, under the theme "Nostalgia".
+A retro-styled, pixelated interactive memory mapping experience built for the [SESA x WDCC Hackathon](https://wdccxsesahackathon.com) 2025 by Team Fullstack Big Backs, under the theme "Nostalgia".
 
 Our application lets users create, explore, and share cherished memories on a beautifully rendered 3D globe. Every interaction is designed to feel like a journey through time: from the nostalgic pixel-art interface to the retro audio effects, the entire experience evokes the charm of early web and gaming eras.
 
